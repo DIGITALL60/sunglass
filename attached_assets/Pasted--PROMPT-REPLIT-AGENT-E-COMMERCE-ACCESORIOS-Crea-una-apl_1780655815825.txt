@@ -1,0 +1,215 @@
+# PROMPT REPLIT AGENT — E-COMMERCE ACCESORIOS
+
+-----
+
+Crea una aplicación web full-stack completa de e-commerce de accesorios premium con panel administrativo. Quiero que funcione todo al 100% sin errores.
+
+## STACK
+
+- React + Vite + Tailwind CSS (frontend)
+- Node.js + Express (backend)
+- SQLite con better-sqlite3 (base de datos, sin configuración externa)
+- JWT + bcryptjs (autenticación)
+- Multer (subida de imágenes)
+- Zustand (carrito de compras)
+- React Router v6 (rutas)
+- Framer Motion (animaciones)
+- Lucide React (íconos)
+- Fuentes: Orbitron (títulos) + Syne (cuerpo) desde Google Fonts
+
+El servidor corre en puerto 3001. El cliente Vite en 5173. Configurar proxy en vite.config.js para que /api apunte a localhost:3001. Express sirve los archivos estáticos del build en producción.
+
+## DISEÑO — FUTURISTA TECH PREMIUM
+
+Paleta de colores obligatoria:
+
+- Fondo principal: #050508
+- Fondo cards: #111118
+- Acento principal: #00f5ff (cyan)
+- Texto: #e8e8f0
+- Texto secundario: #8888aa
+- Bordes: rgba(0,245,255,0.15)
+
+Tipografía: Orbitron para headings, Syne para el resto. Nunca usar Inter, Roboto ni Arial.
+
+Efectos visuales obligatorios:
+
+- Fondo con textura de grano sutil (SVG filter noise)
+- Grid lines decorativas muy suaves tipo HUD en el fondo
+- Cards con glassmorphism: background rgba(17,17,24,0.8) + backdrop-filter blur(12px)
+- Bordes cyan con glow en hover: box-shadow 0 0 20px rgba(0,245,255,0.3)
+- Cursor personalizado: círculo pequeño que sigue al mouse con lerp suave
+- Botones con efecto de llenado cyan de adentro hacia afuera en hover
+- Animaciones de entrada con Framer Motion stagger en las cards
+
+## BASE DE DATOS
+
+Tabla users:
+
+- id, email (unique), password (hash bcrypt), role (default ‘admin’), created_at
+
+Tabla products:
+
+- id, name, category, price, description, image_url, created_at
+
+Al iniciar el servidor por primera vez, seedear automáticamente:
+
+- Usuario admin: email [admin@tienda.com](mailto:admin@tienda.com) / password admin123 (hasheado con bcrypt)
+- 8 productos de ejemplo de accesorios (relojes, pulseras, lentes, anillos, etc.) usando imágenes de <https://picsum.photos/600/600?random=1> hasta ?random=8, con categorías variadas: Relojes, Pulseras, Lentes, Anillos
+
+## API ENDPOINTS
+
+POST /api/auth/login → recibe email y password, devuelve JWT válido 7 días
+GET /api/products → lista todos los productos (público, sin auth)
+GET /api/products/:id → detalle de un producto (público)
+POST /api/products → crear producto (requiere JWT en header Authorization Bearer)
+PUT /api/products/:id → editar producto (requiere JWT)
+DELETE /api/products/:id → eliminar producto (requiere JWT)
+
+El middleware de auth verifica el header Authorization Bearer y devuelve 401 si no es válido.
+
+Las imágenes se suben con Multer a la carpeta /public/uploads/ y se sirven como archivos estáticos en /uploads/. Al crear/editar producto con imagen, usar multipart/form-data.
+
+## PÁGINAS Y RUTAS
+
+### / — Página de inicio
+
+Hero de pantalla completa con el texto “ACCESORIOS DEL FUTURO” en Orbitron enorme, subtítulo “Diseño sin límites. Tecnología sin compromiso.” y botón CTA “EXPLORAR COLECCIÓN” que lleva a /tienda. Fondo con partículas animadas sutiles o grid pulsante. Entrada con Framer Motion.
+
+### /tienda — Tienda pública
+
+- Barra de búsqueda en tiempo real que filtra por nombre
+- Filtros de categoría en pills horizontales generados dinámicamente desde las categorías que existen en la DB
+- Selector de ordenamiento: Más nuevos, Precio menor a mayor, Precio mayor a menor, Nombre A-Z
+- Filtro de rango de precio con dos inputs numéricos (min y max)
+- Grid de productos: 3 columnas desktop, 2 tablet, 1 mobile
+- Cada card muestra: imagen cuadrada con object-fit cover, badge de categoría en cyan, nombre, precio en formato $XX.XXX ARS, botón AGREGAR AL CARRITO con animación hover
+- Hover en card: scale(1.03) + glow border cyan
+- Animación de entrada stagger con Framer Motion al cargar
+
+### /producto/:id — Detalle del producto
+
+- Imagen grande a la izquierda
+- A la derecha: categoría en badge, nombre grande, precio, descripción completa, botón AGREGAR AL CARRITO grande, botón volver
+- Mismos efectos visuales
+
+### Navbar (presente en todas las páginas públicas)
+
+- Logo “NEXUS” en Orbitron a la izquierda
+- Links: Inicio, Tienda
+- Ícono de carrito con badge numérico de cantidad de items
+- Click en carrito abre drawer lateral
+
+### CartDrawer — Drawer lateral del carrito
+
+- Se abre desde la derecha con animación slide
+- Lista cada producto: thumbnail, nombre, precio unitario, controles de cantidad (+ y -), botón eliminar
+- Total calculado en tiempo real
+- Botón FINALIZAR COMPRA que abre un modal de confirmación “¡Pedido recibido! Te contactaremos pronto.” con animación
+- Botón para cerrar el drawer
+
+### /admin/login — Login del administrador
+
+- Formulario centrado con estética futurista
+- Campos: Email y Contraseña
+- Botón INGRESAR
+- Si las credenciales son incorrectas: mensaje de error con animación shake
+- Si son correctas: guardar JWT en localStorage y redirigir a /admin/dashboard
+
+### /admin/dashboard — Panel administrador (ruta protegida)
+
+Si no hay JWT válido en localStorage, redirigir automáticamente a /admin/login.
+
+Layout del panel:
+
+- Sidebar izquierdo fijo con: logo NEXUS ADMIN, link “Productos” (lista), link “Nuevo Producto”, botón “Cerrar Sesión” (limpia localStorage y redirige a /admin/login)
+- Área de contenido principal a la derecha
+
+Vista “Productos” (por defecto al entrar):
+
+- Tabla con columnas: Imagen (thumbnail 60x60), Nombre, Categoría, Precio, Acciones
+- Acciones: botón Editar (ícono lápiz) y botón Eliminar (ícono basura)
+- Al hacer click en Eliminar: modal de confirmación “¿Estás seguro que querés eliminar este producto?” con botones Cancelar y Confirmar
+- Al confirmar: DELETE al endpoint, actualizar la lista sin recargar la página
+- Al hacer click en Editar: cargar el formulario pre-llenado con los datos del producto
+
+Vista “Nuevo Producto” / Formulario de edición:
+
+- Campo: Nombre del producto (input text, requerido)
+- Campo: Categoría (select con las categorías existentes + opción “Nueva categoría” que muestra un input de texto adicional) (requerido)
+- Campo: Precio en ARS (input number, requerido, mayor a 0)
+- Campo: Descripción (textarea mínimo 4 filas, requerido)
+- Campo: Imagen (input file que acepta jpg, jpeg, png, webp)
+- Preview de la imagen seleccionada antes de subir
+- Si es edición: mostrar imagen actual, permitir reemplazarla o mantenerla
+- Validación en frontend antes de enviar: todos los campos requeridos, precio válido
+- Al guardar: spinner de carga → mensaje de éxito con animación → limpiar formulario o volver a la lista
+- Envío como multipart/form-data al endpoint correspondiente con el JWT en el header
+
+## ESTADO GLOBAL CON ZUSTAND
+
+Store con:
+
+- cart: array de { id, name, price, image_url, quantity }
+- addToCart(product): si el producto ya existe suma 1, si no lo agrega con quantity 1
+- removeFromCart(id): elimina el item
+- updateQuantity(id, quantity): actualiza cantidad, si quantity es 0 elimina
+- clearCart(): vacía el carrito
+- cartTotal: computed del total sumando price * quantity
+- cartCount: computed del total de items
+
+No persistir el carrito en localStorage, solo en memoria.
+
+## ARCHIVOS CLAVE A CREAR
+
+server/index.js — servidor Express principal que:
+
+- Importa y configura cors, express.json, express.urlencoded
+- Sirve archivos estáticos de /public/uploads en la ruta /uploads
+- En producción sirve el build de React desde /dist
+- Importa y usa las rutas /api/auth y /api/products
+- Llama a la función de seed de la DB al iniciar
+- Escucha en el puerto 3001
+
+server/db.js — configura better-sqlite3:
+
+- Crea las tablas si no existen
+- Exporta la instancia de la DB
+- Exporta función seedDatabase() que inserta admin y productos de ejemplo solo si no existen
+
+server/middleware/authMiddleware.js — verifica JWT del header Authorization Bearer
+
+server/routes/auth.js — POST /api/auth/login
+
+server/routes/products.js — CRUD completo con Multer para imágenes
+
+src/App.jsx — define todas las rutas con React Router
+
+src/store/useStore.js — Zustand con el carrito
+
+src/components/Navbar.jsx
+src/components/CartDrawer.jsx
+src/components/ProductCard.jsx
+src/components/CustomCursor.jsx
+src/pages/HomePage.jsx
+src/pages/StorePage.jsx
+src/pages/ProductDetailPage.jsx
+src/pages/AdminLoginPage.jsx
+src/pages/AdminDashboardPage.jsx
+
+index.html — importar las fuentes de Google Fonts: Orbitron y Syne
+
+tailwind.config.js — extender con los colores de la paleta y las fuentes
+
+## REGLAS IMPORTANTES
+
+1. Todo debe funcionar sin errores al iniciar con npm run dev
+1. No usar datos mock en el frontend, todo viene de la API Express
+1. El JWT va siempre en el header Authorization: Bearer <token>
+1. Las rutas /admin/dashboard deben estar protegidas con un componente ProtectedRoute
+1. Al agregar un producto nuevo con una categoría nueva, esa categoría debe aparecer inmediatamente en los filtros de la tienda pública
+1. Las imágenes de picsum.photos de los productos seed deben cargarse correctamente
+1. El diseño futurista con la paleta cyan/negro es OBLIGATORIO, no usar colores genéricos
+1. Configurar correctamente el proxy de Vite para /api → localhost:3001
+1. El servidor Express debe manejar correctamente CORS para desarrollo
+1. Todos los errores de la API deben devolver JSON con un campo “error” descriptivo
