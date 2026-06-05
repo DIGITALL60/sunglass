@@ -2,15 +2,14 @@ import { Router } from "express";
 import multer from "multer";
 import path from "path";
 import { requireAuth } from "../middlewares/auth.js";
-import { fileURLToPath } from "url";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const UPLOADS_DIR = path.join(__dirname, "../../uploads");
+// Use process.cwd() — server runs from artifacts/api-server/
+const UPLOADS_DIR = path.join(process.cwd(), "uploads");
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
   filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
+    const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
     const unique = `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
     cb(null, unique);
   },
@@ -22,7 +21,7 @@ const upload = multer({
   fileFilter: (_req, file, cb) => {
     const allowed = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
     const ext = path.extname(file.originalname).toLowerCase();
-    if (allowed.includes(ext)) {
+    if (allowed.includes(ext) || file.mimetype.startsWith("image/")) {
       cb(null, true);
     } else {
       cb(new Error("Solo se permiten imágenes (jpg, png, webp, gif)"));
