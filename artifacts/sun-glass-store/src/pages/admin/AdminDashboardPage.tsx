@@ -34,7 +34,7 @@ export default function AdminDashboardPage() {
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
-    setLocation("/admin/login");
+    setLocation("/");
   };
 
   const { data: stats } = useGetProductStats();
