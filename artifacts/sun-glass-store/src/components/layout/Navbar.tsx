@@ -1,33 +1,54 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { ShoppingCart } from "lucide-react";
 import logoPath from "@assets/f9a8c8eb-e8b8-48c1-9ca2-dde803a0afde_1780655788028.jpeg";
 import { useCartStore } from "@/store/useCartStore";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { CartDrawer } from "../cart/CartDrawer";
 
 export function Navbar() {
   const cartCount = useCartStore((state) => state.cartCount);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [, setLocation] = useLocation();
+  const clickCount = useRef(0);
+  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    clickCount.current += 1;
+
+    if (clickTimer.current) clearTimeout(clickTimer.current);
+
+    if (clickCount.current >= 3) {
+      clickCount.current = 0;
+      setLocation("/admin/login");
+    } else {
+      clickTimer.current = setTimeout(() => {
+        clickCount.current = 0;
+        setLocation("/");
+      }, 600);
+    }
+  };
 
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-40 h-20 bg-glass border-b border-border px-6 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-4 group">
-          <img 
-            src={logoPath} 
-            alt="Sun Glass Logo" 
+        <button onClick={handleLogoClick} className="flex items-center gap-4 group cursor-pointer bg-transparent border-0 p-0">
+          <img
+            src={logoPath}
+            alt="Sun Glass Logo"
             className="w-12 h-12 rounded-full border border-primary/30 group-hover:border-primary group-hover:shadow-[0_0_15px_rgba(255,0,153,0.4)] transition-all"
+            data-testid="img-logo"
           />
           <span className="font-orbitron font-bold text-lg hidden sm:block tracking-wider text-primary">
             SUN GLASS
           </span>
-        </Link>
+        </button>
 
         <div className="flex items-center gap-8 font-orbitron text-sm font-semibold tracking-wide">
-          <Link href="/" className="hover:text-primary transition-colors data-[active=true]:text-primary">INICIO</Link>
-          <Link href="/tienda" className="hover:text-primary transition-colors data-[active=true]:text-primary">TIENDA</Link>
-          
-          <button 
+          <Link href="/" className="hover:text-primary transition-colors">INICIO</Link>
+          <Link href="/tienda" className="hover:text-primary transition-colors">TIENDA</Link>
+
+          <button
             onClick={() => setIsCartOpen(true)}
             className="relative p-2 hover:text-primary transition-colors"
             data-testid="button-open-cart"
@@ -41,7 +62,7 @@ export function Navbar() {
           </button>
         </div>
       </nav>
-      
+
       <CartDrawer isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
