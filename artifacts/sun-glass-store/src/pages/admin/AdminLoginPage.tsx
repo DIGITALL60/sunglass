@@ -33,10 +33,10 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-[100dvh] flex items-center justify-center px-4 bg-background relative overflow-hidden">
       <div className="absolute inset-0 bg-grid opacity-20 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,245,255,0.05),transparent_50%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,0,153,0.05),transparent_50%)]" />
 
       <motion.div 
-        className="w-full max-w-md bg-card/80 backdrop-blur-xl border border-primary/20 p-8 rounded-2xl shadow-[0_0_40px_rgba(0,245,255,0.1)] z-10"
+        className="w-full max-w-md bg-card/80 backdrop-blur-xl border border-primary/20 p-8 rounded-2xl shadow-[0_0_40px_rgba(255,0,153,0.1)] z-10"
         animate={error ? { x: [-10, 10, -10, 10, 0] } : {}}
         transition={{ duration: 0.4 }}
       >

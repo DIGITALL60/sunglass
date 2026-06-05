@@ -16,7 +16,7 @@ export function Navbar() {
           <img 
             src={logoPath} 
             alt="Sun Glass Logo" 
-            className="w-12 h-12 rounded-full border border-primary/30 group-hover:border-primary group-hover:shadow-[0_0_15px_rgba(0,245,255,0.4)] transition-all"
+            className="w-12 h-12 rounded-full border border-primary/30 group-hover:border-primary group-hover:shadow-[0_0_15px_rgba(255,0,153,0.4)] transition-all"
           />
           <span className="font-orbitron font-bold text-lg hidden sm:block tracking-wider text-primary">
             SUN GLASS

@@ -52,31 +52,31 @@
 }
 
 :root {
-  --button-outline: rgba(0,245,255, .15);
-  --badge-outline: rgba(0,245,255, .15);
+  --button-outline: rgba(255,0,153, .15);
+  --badge-outline: rgba(255,0,153, .15);
   --opaque-button-border-intensity: -8;
-  --elevate-1: rgba(0,245,255, .05);
-  --elevate-2: rgba(0,245,255, .10);
+  --elevate-1: rgba(255,0,153, .05);
+  --elevate-2: rgba(255,0,153, .10);
 
   /* Background #050508 */
   --background: 240 23% 3%;
   /* Text #e8e8f0 */
   --foreground: 240 20% 93%;
   
-  /* Borders rgba(0,245,255,0.15) -> 182 100% 50% with alpha */
-  --border: 182 100% 50% / 0.15;
+  /* Borders rgba(255,0,153,0.15) -> 324 100% 50% with alpha */
+  --border: 324 100% 50% / 0.15;
   
   /* Card backgrounds #111118 */
   --card: 240 17% 8%;
   --card-foreground: 240 20% 93%;
-  --card-border: 182 100% 50% / 0.15;
+  --card-border: 324 100% 50% / 0.15;
   
   --popover: 240 17% 8%;
   --popover-foreground: 240 20% 93%;
-  --popover-border: 182 100% 50% / 0.15;
+  --popover-border: 324 100% 50% / 0.15;
   
-  /* Primary accent #00f5ff */
-  --primary: 182 100% 50%;
+  /* Primary accent #FF0099 */
+  --primary: 324 100% 50%;
   --primary-foreground: 240 23% 3%;
   
   --secondary: 240 17% 12%;
@@ -86,14 +86,14 @@
   --muted: 240 17% 12%;
   --muted-foreground: 240 17% 60%;
   
-  --accent: 182 100% 50% / 0.1;
-  --accent-foreground: 182 100% 50%;
+  --accent: 324 100% 50% / 0.1;
+  --accent-foreground: 324 100% 50%;
   
   --destructive: 0 84% 60%;
   --destructive-foreground: 240 20% 93%;
   
-  --input: 182 100% 50% / 0.2;
-  --ring: 182 100% 50%;
+  --input: 324 100% 50% / 0.2;
+  --ring: 324 100% 50%;
   
   --app-font-sans: 'Syne', sans-serif;
   --app-font-serif: Georgia, serif;
@@ -102,63 +102,63 @@
   
   --radius: 0.5rem;
   
-  --shadow-2xs: 0 0 4px rgba(0,245,255,0.1);
-  --shadow-xs: 0 0 8px rgba(0,245,255,0.15);
-  --shadow-sm: 0 0 12px rgba(0,245,255,0.2);
-  --shadow: 0 0 16px rgba(0,245,255,0.25);
-  --shadow-md: 0 0 20px rgba(0,245,255,0.3);
-  --shadow-lg: 0 0 24px rgba(0,245,255,0.35);
-  --shadow-xl: 0 0 32px rgba(0,245,255,0.4);
-  --shadow-2xl: 0 0 40px rgba(0,245,255,0.5);
+  --shadow-2xs: 0 0 4px rgba(255,0,153,0.1);
+  --shadow-xs: 0 0 8px rgba(255,0,153,0.15);
+  --shadow-sm: 0 0 12px rgba(255,0,153,0.2);
+  --shadow: 0 0 16px rgba(255,0,153,0.25);
+  --shadow-md: 0 0 20px rgba(255,0,153,0.3);
+  --shadow-lg: 0 0 24px rgba(255,0,153,0.35);
+  --shadow-xl: 0 0 32px rgba(255,0,153,0.4);
+  --shadow-2xl: 0 0 40px rgba(255,0,153,0.5);
 
   --sidebar: 240 17% 8%;
   --sidebar-foreground: 240 20% 93%;
-  --sidebar-border: 182 100% 50% / 0.15;
-  --sidebar-primary: 182 100% 50%;
+  --sidebar-border: 324 100% 50% / 0.15;
+  --sidebar-primary: 324 100% 50%;
   --sidebar-primary-foreground: 240 23% 3%;
-  --sidebar-accent: 182 100% 50% / 0.1;
-  --sidebar-accent-foreground: 182 100% 50%;
-  --sidebar-ring: 182 100% 50%;
+  --sidebar-accent: 324 100% 50% / 0.1;
+  --sidebar-accent-foreground: 324 100% 50%;
+  --sidebar-ring: 324 100% 50%;
 }
 
 .dark {
   /* Same as root since it's a forced dark theme */
-  --button-outline: rgba(0,245,255, .15);
-  --badge-outline: rgba(0,245,255, .15);
+  --button-outline: rgba(255,0,153, .15);
+  --badge-outline: rgba(255,0,153, .15);
   --opaque-button-border-intensity: 9;
-  --elevate-1: rgba(0,245,255, .05);
-  --elevate-2: rgba(0,245,255, .10);
+  --elevate-1: rgba(255,0,153, .05);
+  --elevate-2: rgba(255,0,153, .10);
 
   --background: 240 23% 3%;
   --foreground: 240 20% 93%;
-  --border: 182 100% 50% / 0.15;
+  --border: 324 100% 50% / 0.15;
   --card: 240 17% 8%;
   --card-foreground: 240 20% 93%;
-  --card-border: 182 100% 50% / 0.15;
+  --card-border: 324 100% 50% / 0.15;
   --popover: 240 17% 8%;
   --popover-foreground: 240 20% 93%;
-  --popover-border: 182 100% 50% / 0.15;
-  --primary: 182 100% 50%;
+  --popover-border: 324 100% 50% / 0.15;
+  --primary: 324 100% 50%;
   --primary-foreground: 240 23% 3%;
   --secondary: 240 17% 12%;
   --secondary-foreground: 240 20% 93%;
   --muted: 240 17% 12%;
   --muted-foreground: 240 17% 60%;
-  --accent: 182 100% 50% / 0.1;
-  --accent-foreground: 182 100% 50%;
+  --accent: 324 100% 50% / 0.1;
+  --accent-foreground: 324 100% 50%;
   --destructive: 0 84% 60%;
   --destructive-foreground: 240 20% 93%;
-  --input: 182 100% 50% / 0.2;
-  --ring: 182 100% 50%;
+  --input: 324 100% 50% / 0.2;
+  --ring: 324 100% 50%;
   
   --sidebar: 240 17% 8%;
   --sidebar-foreground: 240 20% 93%;
-  --sidebar-border: 182 100% 50% / 0.15;
-  --sidebar-primary: 182 100% 50%;
+  --sidebar-border: 324 100% 50% / 0.15;
+  --sidebar-primary: 324 100% 50%;
   --sidebar-primary-foreground: 240 23% 3%;
-  --sidebar-accent: 182 100% 50% / 0.1;
-  --sidebar-accent-foreground: 182 100% 50%;
-  --sidebar-ring: 182 100% 50%;
+  --sidebar-accent: 324 100% 50% / 0.1;
+  --sidebar-accent-foreground: 324 100% 50%;
+  --sidebar-ring: 324 100% 50%;
 }
 
 @layer base {
@@ -181,7 +181,7 @@
 }
 
 .glow-hover:hover {
-  box-shadow: 0 0 20px rgba(0,245,255,0.3);
+  box-shadow: 0 0 20px rgba(255,0,153,0.3);
   transform: scale(1.03);
 }
 
@@ -192,8 +192,8 @@
 /* Background grid overlay */
 .bg-grid {
   background-size: 40px 40px;
-  background-image: linear-gradient(to right, rgba(0,245,255,0.03) 1px, transparent 1px),
-                    linear-gradient(to bottom, rgba(0,245,255,0.03) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(255,0,153,0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,0,153,0.03) 1px, transparent 1px);
 }
 
 /* Texture overlay */

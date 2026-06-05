@@ -35,7 +35,7 @@ export default function StorePage() {
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-        <h1 className="font-orbitron text-4xl font-bold text-primary drop-shadow-[0_0_10px_rgba(0,245,255,0.3)]">
+        <h1 className="font-orbitron text-4xl font-bold text-primary drop-shadow-[0_0_10px_rgba(255,0,153,0.3)]">
           COLECCIÓN
         </h1>
 
@@ -72,7 +72,7 @@ export default function StorePage() {
             <div className="flex flex-wrap lg:flex-col gap-2">
               <Button 
                 variant={!category ? "default" : "outline"}
-                className={`justify-start ${!category ? 'shadow-[0_0_10px_rgba(0,245,255,0.3)]' : 'border-primary/20'}`}
+                className={`justify-start ${!category ? 'shadow-[0_0_10px_rgba(255,0,153,0.3)]' : 'border-primary/20'}`}
                 onClick={() => setCategory(undefined)}
               >
                 Todas
@@ -81,7 +81,7 @@ export default function StorePage() {
                 <Button 
                   key={c}
                   variant={category === c ? "default" : "outline"}
-                  className={`justify-start ${category === c ? 'shadow-[0_0_10px_rgba(0,245,255,0.3)]' : 'border-primary/20'}`}
+                  className={`justify-start ${category === c ? 'shadow-[0_0_10px_rgba(255,0,153,0.3)]' : 'border-primary/20'}`}
                   onClick={() => setCategory(c)}
                 >
                   {c}

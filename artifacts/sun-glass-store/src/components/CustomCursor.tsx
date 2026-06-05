@@ -40,7 +40,7 @@ export function CustomCursor() {
       className="fixed top-0 left-0 w-4 h-4 bg-primary rounded-full pointer-events-none z-[9999] mix-blend-screen"
       style={{
         transform: `translate3d(${position.x - 8}px, ${position.y - 8}px, 0)`,
-        boxShadow: '0 0 10px rgba(0,245,255,0.8)',
+        boxShadow: '0 0 10px rgba(255,0,153,0.8)',
       }}
     />
   );

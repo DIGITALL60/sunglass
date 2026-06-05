@@ -42,7 +42,7 @@ export default function ProductDetailPage() {
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="aspect-square rounded-2xl overflow-hidden border border-primary/20 bg-card relative shadow-[0_0_30px_rgba(0,245,255,0.05)]"
+          className="aspect-square rounded-2xl overflow-hidden border border-primary/20 bg-card relative shadow-[0_0_30px_rgba(255,0,153,0.05)]"
         >
           <img 
             src={product.image_url} 
@@ -62,7 +62,7 @@ export default function ProductDetailPage() {
           
           <h1 className="text-4xl md:text-5xl font-bold mb-4">{product.name}</h1>
           
-          <p className="font-orbitron text-3xl font-black text-primary drop-shadow-[0_0_10px_rgba(0,245,255,0.3)] mb-8">
+          <p className="font-orbitron text-3xl font-black text-primary drop-shadow-[0_0_10px_rgba(255,0,153,0.3)] mb-8">
             {formatPrice(product.price)}
           </p>
           

@@ -104,15 +104,15 @@ export default function AdminDashboardPage() {
         {/* Stats */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(0,245,255,0.05)]">
+            <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(255,0,153,0.05)]">
               <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Total Productos</h3>
               <p className="text-4xl font-bold text-primary">{stats.totalProducts}</p>
             </div>
-            <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(0,245,255,0.05)]">
+            <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(255,0,153,0.05)]">
               <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Categorías</h3>
               <p className="text-4xl font-bold text-primary">{stats.totalCategories}</p>
             </div>
-            <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(0,245,255,0.05)]">
+            <div className="bg-card p-6 rounded-xl border border-primary/20 shadow-[0_0_15px_rgba(255,0,153,0.05)]">
               <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Rango de Precios</h3>
               <p className="text-xl font-bold text-primary">{formatPrice(stats.priceRange.min)} - {formatPrice(stats.priceRange.max)}</p>
             </div>
@@ -120,7 +120,7 @@ export default function AdminDashboardPage() {
         )}
 
         {/* Table */}
-        <div className="bg-card rounded-xl border border-primary/20 overflow-hidden shadow-[0_0_15px_rgba(0,245,255,0.05)]">
+        <div className="bg-card rounded-xl border border-primary/20 overflow-hidden shadow-[0_0_15px_rgba(255,0,153,0.05)]">
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead className="bg-secondary/50 border-b border-primary/20">

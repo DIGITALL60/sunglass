@@ -14,7 +14,7 @@ export default function HomePage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <h1 className="font-orbitron text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-primary drop-shadow-[0_0_20px_rgba(0,245,255,0.4)] mb-6">
+          <h1 className="font-orbitron text-5xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-primary drop-shadow-[0_0_20px_rgba(255,0,153,0.4)] mb-6">
             ACCESORIOS<br/>DEL FUTURO
           </h1>
         </motion.div>
@@ -35,7 +35,7 @@ export default function HomePage() {
           transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
         >
           <Link href="/tienda">
-            <Button size="lg" className="h-16 px-10 text-lg font-orbitron tracking-[0.2em] bg-primary text-primary-foreground hover:bg-primary hover:shadow-[0_0_30px_rgba(0,245,255,0.6)] transition-all duration-300">
+            <Button size="lg" className="h-16 px-10 text-lg font-orbitron tracking-[0.2em] bg-primary text-primary-foreground hover:bg-primary hover:shadow-[0_0_30px_rgba(255,0,153,0.6)] transition-all duration-300">
               EXPLORAR COLECCIÓN
             </Button>
           </Link>
