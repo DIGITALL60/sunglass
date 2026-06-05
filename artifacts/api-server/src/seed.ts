@@ -67,7 +67,7 @@ export async function seedDatabase() {
     // Seed admin user
     const existingUsers = await db.select().from(usersTable).limit(1);
     if (existingUsers.length === 0) {
-      const hashed = await bcrypt.hash("admin123", 10);
+      const hashed = await bcrypt.hash("fiamayjorge", 10);
       await db.insert(usersTable).values({
         email: "admin@tienda.com",
         password: hashed,
