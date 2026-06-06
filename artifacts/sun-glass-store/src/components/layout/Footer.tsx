@@ -32,7 +32,7 @@ export function Footer() {
 
           {/* Instagram */}
           <a
-            href="https://www.instagram.com/sunglassaccesorios"
+            href="https://www.instagram.com/sunglass.vm"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-sm font-semibold text-foreground hover:text-primary transition-colors group"
