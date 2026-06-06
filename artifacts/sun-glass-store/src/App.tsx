@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { setupApiClient } from "@/lib/api";
 
 import { Navbar } from "@/components/layout/Navbar";
+import { Footer } from "@/components/layout/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
 
 import HomePage from "@/pages/HomePage";
@@ -25,6 +26,7 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
     <>
       <Navbar />
       <main>{children}</main>
+      <Footer />
     </>
   );
 }
