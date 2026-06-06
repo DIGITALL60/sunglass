@@ -1,6 +1,5 @@
 import { Link, useLocation } from "wouter";
 import { ShoppingCart } from "lucide-react";
-import logoPath from "@assets/f9a8c8eb-e8b8-48c1-9ca2-dde803a0afde_1780655788028.jpeg";
 import { useCartStore } from "@/store/useCartStore";
 import { useState, useRef } from "react";
 import { CartDrawer } from "../cart/CartDrawer";
@@ -34,9 +33,9 @@ export function Navbar() {
       <nav className="fixed top-0 left-0 right-0 z-40 h-20 bg-glass border-b border-border px-6 flex items-center justify-between">
         <button onClick={handleLogoClick} className="flex items-center gap-4 group cursor-pointer bg-transparent border-0 p-0">
           <img
-            src={logoPath}
+            src="/logo-nobg.png"
             alt="Sun Glass Logo"
-            className="w-12 h-12 rounded-full border border-primary/30 group-hover:border-primary group-hover:shadow-[0_0_15px_rgba(255,0,153,0.4)] transition-all"
+            className="w-12 h-12 object-contain group-hover:drop-shadow-[0_0_10px_rgba(255,0,153,0.6)] transition-all"
             data-testid="img-logo"
           />
           <span className="font-orbitron font-bold text-lg hidden sm:block tracking-wider text-primary">
