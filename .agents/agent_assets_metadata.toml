@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "UqIS4XgnaFNSB1VS0bAEW"
+uri = "file://sunglass-admin-railway.zip"
+type = "unspecified"
+title = "sunglass-admin-railway.zip — Panel Admin standalone"
