@@ -47,7 +47,15 @@ export function Footer() {
 
         {/* Copy */}
         <p className="text-xs text-muted-foreground text-center sm:text-right">
-          © {new Date().getFullYear()} Sun Glass.<br className="sm:hidden" /> Todos los derechos reservados.
+          © {new Date().getFullYear()} Sun Glass. Creado por{" "}
+          <a
+            href="https://www.digitall.baby"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold text-primary hover:underline"
+          >
+            DIGITALL
+          </a>
         </p>
       </div>
     </footer>
