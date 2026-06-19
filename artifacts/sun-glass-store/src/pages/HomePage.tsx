@@ -9,7 +9,7 @@ export default function HomePage() {
 
   const titles = [
     "¡TU DOSIS DIARIA DE DIVERSION TE ESPERA ACA!",
-    "DIVERSION, ESTILO Y TODO LO QUE TE GUSTA"
+    "COLECCIONA MOMENTOS, ACUMULA PERSONAJES."
   ];
 
   useEffect(() => {
