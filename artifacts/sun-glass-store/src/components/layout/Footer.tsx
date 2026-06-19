@@ -8,7 +8,6 @@ export function Footer() {
         <div className="flex items-center gap-3">
           <img src="/logo-nobg.png" alt="Sun Glass" className="w-10 h-10 object-contain" />
           <div>
-            <p className="font-orbitron font-bold text-primary text-base leading-tight">SUN GLASS</p>
             <p className="text-xs text-muted-foreground font-orbitron mt-1 max-w-[200px]">¡TUS PERSONAJES FAVORITOS Y LOS LLAVEROS MAS ORIGINALES EN UN SOLO LUGAR!</p>
           </div>
         </div>

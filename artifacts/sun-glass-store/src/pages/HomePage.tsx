@@ -90,7 +90,7 @@ export default function HomePage() {
               maxWidth: "38ch",
             }}
           >
-            Diseño sin límites. Tecnología sin compromiso.
+            Diversión, estilo y todo lo que te gusta..
           </p>
 
           <Link href="/tienda">

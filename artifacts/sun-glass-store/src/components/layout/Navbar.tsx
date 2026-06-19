@@ -30,12 +30,12 @@ export function Navbar() {
         </button>
 
         <div className="flex items-center gap-8 font-orbitron text-sm font-semibold tracking-wide">
-          <Link href="/" className="hover:text-primary transition-colors">INICIO</Link>
-          <Link href="/tienda" className="hover:text-primary transition-colors">TIENDA</Link>
+          <Link href="/" className="text-primary hover:text-primary/80 transition-colors">INICIO</Link>
+          <Link href="/tienda" className="text-primary hover:text-primary/80 transition-colors">TIENDA</Link>
 
           <button
             onClick={() => setIsCartOpen(true)}
-            className="relative p-2 hover:text-primary transition-colors"
+            className="relative p-2 text-primary hover:text-primary/80 transition-colors"
             data-testid="button-open-cart"
           >
             <ShoppingCart className="w-6 h-6" />
