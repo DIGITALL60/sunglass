@@ -8,24 +8,10 @@ export function Navbar() {
   const cartCount = useCartStore((state) => state.cartCount);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [, setLocation] = useLocation();
-  const clickCount = useRef(0);
-  const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    clickCount.current += 1;
-
-    if (clickTimer.current) clearTimeout(clickTimer.current);
-
-    if (clickCount.current >= 3) {
-      clickCount.current = 0;
-      setLocation("/admin/login");
-    } else {
-      clickTimer.current = setTimeout(() => {
-        clickCount.current = 0;
-        setLocation("/");
-      }, 600);
-    }
+    setLocation("/admin/login");
   };
 
   return (

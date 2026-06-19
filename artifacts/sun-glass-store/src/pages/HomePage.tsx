@@ -1,8 +1,22 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
+  const [textIndex, setTextIndex] = useState(0);
+  const titles = [
+    "¡TU DOSIS DIARIA DE DIVERSION TE ESPERA ACA!",
+    "DIVERSION, ESTILO Y TODO LO QUE TE GUSTA"
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTextIndex((prev) => (prev + 1) % titles.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden">
       {/* Background video — max quality */}
@@ -13,7 +27,7 @@ export default function HomePage() {
         playsInline
         className="absolute inset-0 w-full h-full object-cover scale-[1.15]"
         style={{ imageRendering: "auto" }}
-        src="/hero-bg.mp4"
+        src="/sun.mp4"
       />
 
       {/* Very subtle full-screen vignette */}
@@ -35,16 +49,25 @@ export default function HomePage() {
             boxShadow: "0 8px 48px rgba(0,0,0,0.35), inset 0 0 60px rgba(255,0,153,0.04)",
           }}
         >
-          <h1
-            className="font-orbitron font-black leading-tight text-white"
-            style={{
-              fontSize: "clamp(2.4rem, 8vw, 6rem)",
-              textShadow: "0 2px 30px rgba(255,0,153,0.65), 0 0 60px rgba(255,0,153,0.3)",
-              letterSpacing: "0.02em",
-            }}
-          >
-            ¡TU DOSIS DIARIA DE DIVERSION<br />TE ESPERA ACA!
-          </h1>
+          <div className="h-[180px] sm:h-[160px] flex items-center justify-center relative w-full">
+            <AnimatePresence mode="wait">
+              <motion.h1
+                key={textIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.5 }}
+                className="font-orbitron font-black leading-[1.1] text-white absolute w-full"
+                style={{
+                  fontSize: "clamp(2rem, 6vw, 4.5rem)",
+                  textShadow: "0 2px 30px rgba(255,0,153,0.65), 0 0 60px rgba(255,0,153,0.3)",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                {titles[textIndex]}
+              </motion.h1>
+            </AnimatePresence>
+          </div>
 
           <p
             className="text-white/90 font-medium"
