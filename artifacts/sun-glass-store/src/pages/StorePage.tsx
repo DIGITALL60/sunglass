@@ -73,7 +73,7 @@ export default function StorePage() {
       </div>
 
       <div>
-        <h3 className="font-orbitron font-semibold mb-3 text-primary text-sm tracking-widest">PRECIO (ARS)</h3>
+        <h3 className="font-orbitron font-semibold mb-3 text-primary text-sm tracking-widest">Rango De Precios</h3>
         <div className="flex items-center gap-2">
           <Input
             type="number"
@@ -96,8 +96,9 @@ export default function StorePage() {
   );
 
   return (
-    <div className="min-h-[100dvh] pt-24 pb-20 px-4 sm:px-6 max-w-7xl mx-auto">
-      {/* Header row */}
+    <div className="min-h-[100dvh] bg-[#FF0099]/10 pt-24 pb-20 px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Header row */}
       <div className="flex items-center justify-between gap-3 mb-6">
         <h1 className="font-orbitron text-2xl sm:text-4xl font-bold text-primary">COLECCIÓN</h1>
 
@@ -251,6 +252,7 @@ export default function StorePage() {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

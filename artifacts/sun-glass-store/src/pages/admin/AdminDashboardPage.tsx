@@ -111,7 +111,7 @@ export default function AdminDashboardPage() {
               <p className="text-4xl font-bold text-primary">{stats.totalCategories}</p>
             </div>
             <div className="bg-card p-6 rounded-xl border border-primary/20">
-              <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Rango de Precios</h3>
+              <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Rango De Precios</h3>
               <p className="text-xl font-bold text-primary">{formatPrice(stats.priceRange.min)} – {formatPrice(stats.priceRange.max)}</p>
             </div>
           </div>

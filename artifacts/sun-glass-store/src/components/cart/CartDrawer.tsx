@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
-import { X, Minus, Plus, Trash2, MessageCircle } from "lucide-react";
+import { X, Minus, Plus, Trash2, MessageCircle, Truck, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const WHATSAPP_NUMBER = "5493534069127";
@@ -55,7 +55,7 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-full sm:w-96 bg-card border-l border-primary/30 z-50 shadow-2xl flex flex-col"
+            className="fixed top-0 right-0 h-full w-full sm:w-96 bg-[#FF0099]/10 backdrop-blur-3xl border-l border-primary/30 z-50 shadow-2xl flex flex-col"
           >
             <div className="p-4 border-b border-primary/20 flex items-center justify-between">
               <h2 className="font-orbitron font-bold text-xl text-primary">CARRITO</h2>
@@ -125,6 +125,14 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                 <p className="text-xs text-muted-foreground text-center">
                   Te redirigimos a WhatsApp con tu pedido listo
                 </p>
+                <div className="pt-2 border-t border-primary/10 flex flex-col gap-1.5 mt-2 text-xs text-foreground/80 font-medium font-orbitron">
+                  <div className="flex items-center gap-2">
+                    <Truck className="w-4 h-4 text-primary" /> Envíos a todo el país
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CreditCard className="w-4 h-4 text-primary" /> Todos los medios de pago
+                  </div>
+                </div>
               </div>
             )}
           </motion.div>

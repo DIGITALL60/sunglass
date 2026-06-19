@@ -1,4 +1,4 @@
-import { Instagram } from "lucide-react";
+import { Instagram, Truck, CreditCard } from "lucide-react";
 
 export function Footer() {
   return (
@@ -9,7 +9,17 @@ export function Footer() {
           <img src="/logo-nobg.png" alt="Sun Glass" className="w-10 h-10 object-contain" />
           <div>
             <p className="font-orbitron font-bold text-primary text-base leading-tight">SUN GLASS</p>
-            <p className="text-xs text-muted-foreground">Accesorios Con Onda</p>
+            <p className="text-xs text-muted-foreground font-orbitron mt-1 max-w-[200px]">¡TUS PERSONAJES FAVORITOS Y LOS LLAVEROS MAS ORIGINALES EN UN SOLO LUGAR!</p>
+          </div>
+        </div>
+
+        {/* Shipping & Payment */}
+        <div className="flex flex-col gap-2 font-orbitron text-xs text-foreground/80 font-medium my-4 sm:my-0">
+          <div className="flex items-center gap-2">
+            <Truck className="w-4 h-4 text-primary" /> Envíos a todo el país
+          </div>
+          <div className="flex items-center gap-2">
+            <CreditCard className="w-4 h-4 text-primary" /> Todos los medios de pago
           </div>
         </div>
 

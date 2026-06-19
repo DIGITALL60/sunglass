@@ -11,7 +11,7 @@ export default function HomePage() {
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover scale-[1.15]"
         style={{ imageRendering: "auto" }}
         src="/hero-bg.mp4"
       />
@@ -43,7 +43,7 @@ export default function HomePage() {
               letterSpacing: "0.02em",
             }}
           >
-            ACCESORIOS<br />DEL FUTURO
+            ¡TU DOSIS DIARIA DE DIVERSION<br />TE ESPERA ACA!
           </h1>
 
           <p
@@ -62,7 +62,7 @@ export default function HomePage() {
               size="lg"
               className="h-14 px-10 text-base font-orbitron tracking-[0.2em] bg-primary text-white hover:bg-primary/85 hover:shadow-[0_0_40px_rgba(255,0,153,0.8)] transition-all duration-300 border-0 rounded-full"
             >
-              EXPLORAR COLECCIÓN
+              EXPLORAR PRODUCTOS Y NOVEDADES
             </Button>
           </Link>
         </motion.div>
