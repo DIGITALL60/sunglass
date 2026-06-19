@@ -59,7 +59,7 @@ export default function HomePage() {
                 transition={{ duration: 0.4 }}
                 className="font-orbitron font-black leading-[1.2] text-white"
                 style={{
-                  fontSize: "clamp(1.5rem, 5vw, 3.2rem)",
+                  fontSize: "clamp(1.15rem, 4.5vw, 2.8rem)",
                   textShadow: "0 2px 20px rgba(255,0,153,0.5), 0 0 40px rgba(255,0,153,0.2)",
                   letterSpacing: "0.02em",
                 }}
@@ -72,7 +72,7 @@ export default function HomePage() {
           <p
             className="text-white/80 font-medium"
             style={{
-              fontSize: "clamp(1rem, 2.5vw, 1.35rem)",
+              fontSize: "clamp(0.85rem, 2vw, 1.15rem)",
               textShadow: "0 1px 8px rgba(0,0,0,0.6)",
               maxWidth: "38ch",
             }}
@@ -83,7 +83,7 @@ export default function HomePage() {
           <Link href="/tienda">
             <Button
               size="lg"
-              className="h-14 px-10 text-base font-orbitron tracking-[0.2em] bg-primary text-white hover:bg-primary/85 hover:shadow-[0_0_40px_rgba(255,0,153,0.8)] transition-all duration-300 border-0 rounded-full"
+              className="h-12 sm:h-14 px-6 sm:px-10 text-xs sm:text-sm font-orbitron tracking-[0.2em] bg-primary text-white hover:bg-primary/85 hover:shadow-[0_0_40px_rgba(255,0,153,0.8)] transition-all duration-300 border-0 rounded-full"
             >
               EXPLORAR PRODUCTOS Y NOVEDADES
             </Button>
