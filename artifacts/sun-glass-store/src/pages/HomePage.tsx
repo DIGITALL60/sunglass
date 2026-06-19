@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 
 export default function HomePage() {
   const [textIndex, setTextIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const titles = [
     "¡TU DOSIS DIARIA DE DIVERSION TE ESPERA ACA!",
     "DIVERSION, ESTILO Y TODO LO QUE TE GUSTA"
@@ -17,14 +19,25 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
+  const handleTimeUpdate = () => {
+    if (videoRef.current && videoRef.current.duration) {
+      // Si falta 1 segundo o menos para que termine el video, reiniciarlo
+      if (videoRef.current.currentTime >= videoRef.current.duration - 1) {
+        videoRef.current.currentTime = 0;
+        videoRef.current.play();
+      }
+    }
+  };
+
   return (
     <div className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden">
       {/* Background video — max quality */}
       <video
+        ref={videoRef}
         autoPlay
         muted
-        loop
         playsInline
+        onTimeUpdate={handleTimeUpdate}
         className="absolute inset-0 w-full h-full object-cover scale-[1.15]"
         style={{ imageRendering: "auto" }}
         src="/sun.mp4"
