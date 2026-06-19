@@ -35,32 +35,32 @@ export default function HomePage() {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-3xl mx-auto pt-20">
-        {/* Dark frosted container around text */}
+        {/* Dark frosted container around text - reduced padding and opacity to show more video */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: "easeOut" }}
-          className="flex flex-col items-center gap-6 px-8 py-10 sm:px-14 sm:py-14 rounded-3xl"
+          className="flex flex-col items-center gap-4 px-6 py-8 sm:px-10 sm:py-10 rounded-3xl"
           style={{
-            background: "rgba(0, 0, 0, 0.42)",
-            backdropFilter: "blur(8px)",
-            WebkitBackdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,0,153,0.25)",
-            boxShadow: "0 8px 48px rgba(0,0,0,0.35), inset 0 0 60px rgba(255,0,153,0.04)",
+            background: "rgba(0, 0, 0, 0.25)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
+            border: "1px solid rgba(255,0,153,0.15)",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.25), inset 0 0 30px rgba(255,0,153,0.02)",
           }}
         >
-          <div className="h-[180px] sm:h-[160px] flex items-center justify-center relative w-full">
+          <div className="flex items-center justify-center text-center w-full min-h-[140px] sm:min-h-[120px]">
             <AnimatePresence mode="wait">
               <motion.h1
                 key={textIndex}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.5 }}
-                className="font-orbitron font-black leading-[1.1] text-white absolute w-full"
+                transition={{ duration: 0.4 }}
+                className="font-orbitron font-black leading-[1.2] text-white"
                 style={{
-                  fontSize: "clamp(2rem, 6vw, 4.5rem)",
-                  textShadow: "0 2px 30px rgba(255,0,153,0.65), 0 0 60px rgba(255,0,153,0.3)",
+                  fontSize: "clamp(1.5rem, 5vw, 3.2rem)",
+                  textShadow: "0 2px 20px rgba(255,0,153,0.5), 0 0 40px rgba(255,0,153,0.2)",
                   letterSpacing: "0.02em",
                 }}
               >
@@ -70,7 +70,7 @@ export default function HomePage() {
           </div>
 
           <p
-            className="text-white/90 font-medium"
+            className="text-white/80 font-medium"
             style={{
               fontSize: "clamp(1rem, 2.5vw, 1.35rem)",
               textShadow: "0 1px 8px rgba(0,0,0,0.6)",
