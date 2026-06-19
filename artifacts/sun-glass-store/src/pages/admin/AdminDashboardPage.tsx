@@ -107,7 +107,7 @@ export default function AdminDashboardPage() {
               <p className="text-4xl font-bold text-primary">{stats.totalProducts}</p>
             </div>
             <div className="bg-card p-6 rounded-xl border border-primary/20">
-              <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Categorías</h3>
+              <h3 className="text-muted-foreground text-sm font-orbitron mb-2">Categorias</h3>
               <p className="text-4xl font-bold text-primary">{stats.totalCategories}</p>
             </div>
             <div className="bg-card p-6 rounded-xl border border-primary/20">
@@ -124,7 +124,7 @@ export default function AdminDashboardPage() {
               <thead className="bg-secondary/50 border-b border-primary/20">
                 <tr>
                   <th className="p-4 font-orbitron text-xs text-primary/80">PRODUCTO</th>
-                  <th className="p-4 font-orbitron text-xs text-primary/80">CATEGORÍA</th>
+                  <th className="p-4 font-orbitron text-xs text-primary/80">CATEGORIA</th>
                   <th className="p-4 font-orbitron text-xs text-primary/80">PRECIO</th>
                   <th className="p-4 font-orbitron text-xs text-primary/80 text-right">ACCIONES</th>
                 </tr>
@@ -290,7 +290,7 @@ function ProductFormDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label className="text-xs font-orbitron text-primary/70">CATEGORÍA</Label>
+              <Label className="text-xs font-orbitron text-primary/70">CATEGORIA</Label>
               <select
                 className="flex h-10 w-full rounded-md border border-primary/30 bg-background/50 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 value={category}
@@ -301,7 +301,7 @@ function ProductFormDialog({
               </select>
             </div>
             <div className="space-y-2">
-              <Label className="text-xs font-orbitron text-primary/70">O NUEVA CATEGORÍA</Label>
+              <Label className="text-xs font-orbitron text-primary/70">O NUEVA CATEGORIA</Label>
               <Input
                 value={newCat}
                 onChange={e => setNewCat(e.target.value)}
@@ -375,7 +375,7 @@ function ProductFormDialog({
           </div>
 
           <div className="space-y-2">
-            <Label className="text-xs font-orbitron text-primary/70">DESCRIPCIÓN *</Label>
+            <Label className="text-xs font-orbitron text-primary/70">DESCRIPCION *</Label>
             <Textarea
               required
               value={desc}

@@ -16,7 +16,7 @@ export function Footer() {
         {/* Shipping & Payment */}
         <div className="flex flex-col gap-2 font-orbitron text-xs text-foreground/80 font-medium my-4 sm:my-0">
           <div className="flex items-center gap-2">
-            <Truck className="w-4 h-4 text-primary" /> Envíos a todo el país
+            <Truck className="w-4 h-4 text-primary" /> Envios a todo el pais
           </div>
           <div className="flex items-center gap-2">
             <CreditCard className="w-4 h-4 text-primary" /> Todos los medios de pago

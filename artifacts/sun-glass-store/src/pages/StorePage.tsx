@@ -42,7 +42,7 @@ export default function StorePage() {
   const FilterPanel = () => (
     <div className="space-y-6">
       <div>
-        <h3 className="font-orbitron font-semibold mb-3 text-primary text-sm tracking-widest">CATEGORÍAS</h3>
+        <h3 className="font-orbitron font-semibold mb-3 text-primary text-sm tracking-widest">CATEGORIAS</h3>
         <div className="flex flex-wrap gap-2">
           <button
             className={`px-4 py-2 rounded-full text-sm font-orbitron border transition-all ${
@@ -77,7 +77,7 @@ export default function StorePage() {
         <div className="flex items-center gap-2">
           <Input
             type="number"
-            placeholder="Mín"
+            placeholder="Min"
             value={minPrice}
             onChange={(e) => setMinPrice(e.target.value)}
             className="bg-card/50 border-primary/20 h-10"
@@ -85,7 +85,7 @@ export default function StorePage() {
           <span className="text-muted-foreground">—</span>
           <Input
             type="number"
-            placeholder="Máx"
+            placeholder="Max"
             value={maxPrice}
             onChange={(e) => setMaxPrice(e.target.value)}
             className="bg-card/50 border-primary/20 h-10"
@@ -121,7 +121,7 @@ export default function StorePage() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="newest">Más nuevos</SelectItem>
+              <SelectItem value="newest">Mas nuevos</SelectItem>
               <SelectItem value="price_asc">Menor precio</SelectItem>
               <SelectItem value="price_desc">Mayor precio</SelectItem>
               <SelectItem value="name_az">Nombre A-Z</SelectItem>

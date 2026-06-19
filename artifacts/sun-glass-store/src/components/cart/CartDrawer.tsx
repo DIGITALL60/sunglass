@@ -67,7 +67,7 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
             <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4">
               {cart.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center text-muted-foreground font-orbitron text-sm text-center px-4">
-                  TU CARRITO ESTÁ VACÍO
+                  TU CARRITO ESTA VACIO
                 </div>
               ) : (
                 cart.map((item) => (
@@ -127,7 +127,7 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                 </p>
                 <div className="pt-2 border-t border-primary/10 flex flex-col gap-1.5 mt-2 text-xs text-foreground/80 font-medium font-orbitron">
                   <div className="flex items-center gap-2">
-                    <Truck className="w-4 h-4 text-primary" /> Envíos a todo el país
+                    <Truck className="w-4 h-4 text-primary" /> Envios a todo el pais
                   </div>
                   <div className="flex items-center gap-2">
                     <CreditCard className="w-4 h-4 text-primary" /> Todos los medios de pago
