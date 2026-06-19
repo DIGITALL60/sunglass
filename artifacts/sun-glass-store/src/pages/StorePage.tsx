@@ -100,7 +100,7 @@ export default function StorePage() {
       <div className="max-w-7xl mx-auto">
         {/* Header row */}
       <div className="flex items-center justify-between gap-3 mb-6">
-        <h1 className="font-orbitron text-2xl sm:text-4xl font-bold text-primary">COLECCIÓN</h1>
+        <h1 className="font-orbitron text-2xl sm:text-4xl font-bold text-primary">PRODUCTOS Y NOVEDADES</h1>
 
         <div className="flex items-center gap-2">
           {/* Mobile filter toggle */}
