@@ -78,6 +78,7 @@ router.get("/", async (req, res) => {
       
       const productsWithVariants = results.map(p => ({
         ...p,
+        extra_images: (() => { try { return JSON.parse(p.extra_images || '[]'); } catch { return []; } })(),
         variants: allVariants.filter(v => v.product_id === p.id).map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity }))
       }));
       res.json(productsWithVariants);
@@ -98,8 +99,11 @@ router.post("/", requireAuth, async (req: AuthRequest, res) => {
       return;
     }
 
-    const { variants, ...productData } = parsed.data;
-    const [product] = await db.insert(productsTable).values(productData).returning();
+    const { variants, extra_images, ...productData } = parsed.data;
+    const [product] = await db.insert(productsTable).values({
+      ...productData,
+      extra_images: JSON.stringify(extra_images || [])
+    }).returning();
 
     let createdVariants: any[] = [];
     if (variants && variants.length > 0) {
@@ -112,7 +116,11 @@ router.post("/", requireAuth, async (req: AuthRequest, res) => {
       createdVariants = await db.insert(productVariantsTable).values(variantsToInsert).returning();
     }
 
-    res.status(201).json({ ...product, variants: createdVariants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity })) });
+    res.status(201).json({
+      ...product,
+      extra_images: extra_images || [],
+      variants: createdVariants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity }))
+    });
   } catch {
     res.status(500).json({ error: "Error al crear producto" });
   }
@@ -135,7 +143,11 @@ router.get("/:id", async (req, res) => {
 
     const product = products[0];
     const variants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.product_id, id));
-    res.json({ ...product, variants: variants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity })) });
+    res.json({
+      ...product,
+      extra_images: (() => { try { return JSON.parse(product.extra_images || '[]'); } catch { return []; } })(),
+      variants: variants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity }))
+    });
   } catch {
     res.status(500).json({ error: "Error al obtener producto" });
   }
@@ -162,13 +174,18 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
       return;
     }
 
-    const { variants, ...productData } = parsed.data;
+    const { variants, extra_images, ...productData } = parsed.data;
     let updatedProduct = existing[0];
 
-    if (Object.keys(productData).length > 0) {
+    const updatePayload: any = { ...productData };
+    if (extra_images !== undefined) {
+      updatePayload.extra_images = JSON.stringify(extra_images);
+    }
+
+    if (Object.keys(updatePayload).length > 0) {
       const [updated] = await db
         .update(productsTable)
-        .set(productData)
+        .set(updatePayload)
         .where(eq(productsTable.id, id))
         .returning();
       updatedProduct = updated;
@@ -190,7 +207,11 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
       finalVariants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.product_id, id));
     }
 
-    res.json({ ...updatedProduct, variants: finalVariants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity })) });
+    res.json({
+      ...updatedProduct,
+      extra_images: (() => { try { return JSON.parse(updatedProduct.extra_images || '[]'); } catch { return []; } })(),
+      variants: finalVariants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity }))
+    });
   } catch {
     res.status(500).json({ error: "Error al actualizar producto" });
   }

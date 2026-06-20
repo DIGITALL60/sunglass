@@ -189,6 +189,7 @@ function ProductFormDialog({
 }) {
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const extraFileInputRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
@@ -196,6 +197,7 @@ function ProductFormDialog({
   const [price, setPrice] = useState("");
   const [desc, setDesc] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const [extraImages, setExtraImages] = useState<string[]>([]);
   const [variants, setVariants] = useState<{ id?: number, name: string, available: boolean, quantity: number }[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
@@ -207,6 +209,7 @@ function ProductFormDialog({
       setPrice(product.price.toString());
       setDesc(product.description);
       setImgUrl(product.image_url);
+      setExtraImages(product.extra_images || []);
       setNewCat("");
       setVariants(product.variants || []);
     } else {
@@ -215,44 +218,57 @@ function ProductFormDialog({
       setPrice("");
       setDesc("");
       setImgUrl("");
+      setExtraImages([]);
       setNewCat("");
       setVariants([]);
     }
     setUploadError("");
   }, [product, isOpen]);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, isExtra = false) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
 
     setUploading(true);
     setUploadError("");
 
     try {
       const token = localStorage.getItem("admin_token");
-      const formData = new FormData();
-      formData.append("image", file);
-
       const baseUrl = import.meta.env.VITE_API_URL ?? "";
-      const res = await fetch(`${baseUrl}/api/upload`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+      
+      const uploadedUrls: string[] = [];
+      
+      for (const file of files) {
+        const formData = new FormData();
+        formData.append("image", file);
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Error al subir imagen");
+        const res = await fetch(`${baseUrl}/api/upload`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || "Error al subir imagen");
+        }
+
+        const data = await res.json();
+        const finalUrl = data.url.startsWith("http") ? data.url : `${baseUrl}${data.url}`;
+        uploadedUrls.push(finalUrl);
       }
-
-      const data = await res.json();
-      // Ensure the image URL points to the backend, not the Vercel frontend
-      const finalUrl = data.url.startsWith("http") ? data.url : `${baseUrl}${data.url}`;
-      setImgUrl(finalUrl);
+      
+      if (isExtra) {
+        setExtraImages(prev => [...prev, ...uploadedUrls]);
+      } else {
+        setImgUrl(uploadedUrls[0]);
+      }
     } catch (err: unknown) {
       setUploadError(err instanceof Error ? err.message : "Error al subir imagen");
     } finally {
       setUploading(false);
+      // Reset input
+      e.target.value = '';
     }
   };
 
@@ -269,7 +285,7 @@ function ProductFormDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const finalCategory = newCat.trim() !== "" ? newCat.trim() : category;
-    const data = { name, category: finalCategory, price: Number(price), description: desc, image_url: imgUrl, variants };
+    const data = { name, category: finalCategory, price: Number(price), description: desc, image_url: imgUrl, extra_images: extraImages, variants };
     if (product) {
       updateMut.mutate({ id: product.id, data });
     } else {
@@ -333,12 +349,12 @@ function ProductFormDialog({
 
           {/* Image upload section */}
           <div className="space-y-3">
-            <Label className="text-xs font-orbitron text-primary/70">IMAGEN *</Label>
+            <Label className="text-xs font-orbitron text-primary/70">IMAGEN PRINCIPAL *</Label>
 
-            {/* File picker button */}
+            {/* Main File picker button */}
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-primary/30 rounded-xl p-6 flex flex-col items-center gap-2 cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all"
+              className="border-2 border-dashed border-primary/30 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all"
             >
               {uploading ? (
                 <div className="flex items-center gap-2 text-primary">
@@ -347,9 +363,8 @@ function ProductFormDialog({
                 </div>
               ) : (
                 <>
-                  <Upload className="w-8 h-8 text-primary/50" />
-                  <p className="text-sm text-primary font-orbitron">ELEGIR FOTO</p>
-                  <p className="text-xs text-muted-foreground">JPG, PNG, WEBP — hasta 10 MB</p>
+                  <Upload className="w-6 h-6 text-primary/50" />
+                  <p className="text-xs text-primary font-orbitron">ELEGIR FOTO</p>
                 </>
               )}
             </div>
@@ -359,38 +374,73 @@ function ProductFormDialog({
               type="file"
               accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
               className="hidden"
-              onChange={handleFileChange}
+              onChange={(e) => handleFileChange(e, false)}
               data-testid="input-product-image-file"
             />
 
             {uploadError && <p className="text-destructive text-xs">{uploadError}</p>}
 
-            {/* Preview */}
+            {/* Main Preview */}
             {imgUrl && (
               <div className="relative">
                 <img
                   src={imgUrl}
                   alt="Preview"
-                  className="w-full h-40 object-cover rounded-lg border border-primary/30"
+                  className="w-full h-32 object-cover rounded-lg border border-primary/30"
                   onError={() => setUploadError("No se pudo cargar la imagen")}
                 />
-                <div className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-xs text-primary flex items-center gap-1">
-                  <ImageIcon className="w-3 h-3" /> Vista previa
+                <div className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm px-2 py-1 rounded text-[10px] text-primary flex items-center gap-1">
+                  <ImageIcon className="w-3 h-3" /> Principal
                 </div>
               </div>
             )}
 
-            {/* Optional URL fallback */}
-            <details className="text-xs text-muted-foreground">
-              <summary className="cursor-pointer hover:text-primary transition-colors font-orbitron">O ingresar URL de imagen</summary>
-              <Input
-                value={imgUrl}
-                onChange={e => setImgUrl(e.target.value)}
-                placeholder="https://..."
-                className="bg-background/50 border-primary/30 mt-2 text-xs"
-                data-testid="input-product-image-url"
-              />
-            </details>
+            <div className="h-4"></div>
+            
+            <Label className="text-xs font-orbitron text-primary/70">IMÁGENES SECUNDARIAS (Opcional)</Label>
+            
+            <div
+              onClick={() => extraFileInputRef.current?.click()}
+              className="border-2 border-dashed border-primary/30 rounded-xl p-4 flex flex-col items-center gap-2 cursor-pointer hover:border-primary/60 hover:bg-primary/5 transition-all"
+            >
+               <>
+                 <Upload className="w-6 h-6 text-primary/50" />
+                 <p className="text-xs text-primary font-orbitron">AGREGAR MÁS FOTOS</p>
+                 <p className="text-[10px] text-muted-foreground">Puedes seleccionar varias</p>
+               </>
+            </div>
+            
+            <input
+              ref={extraFileInputRef}
+              type="file"
+              multiple
+              accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+              className="hidden"
+              onChange={(e) => handleFileChange(e, true)}
+            />
+
+            {/* Extra Previews */}
+            {extraImages.length > 0 && (
+              <div className="grid grid-cols-4 gap-2 mt-2">
+                {extraImages.map((img, idx) => (
+                  <div key={idx} className="relative group">
+                    <img
+                      src={img}
+                      alt={`Extra ${idx}`}
+                      className="w-full h-16 object-cover rounded border border-primary/30"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setExtraImages(prev => prev.filter((_, i) => i !== idx))}
+                      className="absolute -top-2 -right-2 bg-destructive text-white rounded-full w-5 h-5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            
           </div>
 
           <div className="space-y-2">

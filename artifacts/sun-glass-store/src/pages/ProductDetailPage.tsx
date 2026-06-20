@@ -17,6 +17,7 @@ export default function ProductDetailPage() {
 
   const [quantity, setQuantity] = useState(1);
   const [selectedModel, setSelectedModel] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState(0);
 
   const { data: product, isLoading } = useGetProduct(id, {
     query: {
@@ -46,11 +47,10 @@ export default function ProductDetailPage() {
     );
   }
 
-  const mainImage = getFullImgUrl(product.image_url);
-  // Mock thumbnails to match the design requested
-  const thumbnails = [mainImage, mainImage, mainImage, mainImage, mainImage];
 
   const productVariants = (product as any)?.variants || [];
+  const allImages = product ? [product.image_url, ...((product as any).extra_images || [])].map(getFullImgUrl) : [];
+  const currentDisplayImage = allImages.length > 0 ? allImages[activeImage] : "";
   
   // Set initial selected model if available
   if (!selectedModel && productVariants.length > 0) {
@@ -66,7 +66,7 @@ export default function ProductDetailPage() {
       <SEO 
         title={product.name} 
         description={product.description ? product.description.substring(0, 150) : "Detalles exclusivos del producto en Sun Glass"} 
-        image={mainImage} 
+        image={currentDisplayImage} 
       />
       <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto font-orbitron">
       {/* Breadcrumbs */}
@@ -81,14 +81,14 @@ export default function ProductDetailPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
         {/* Left: Images */}
         <div className="flex flex-col-reverse md:flex-row gap-4">
-           {/* Thumbnails */}
            <div className="flex md:flex-col gap-3 md:w-20 shrink-0 overflow-x-auto md:overflow-visible">
-              {thumbnails.map((thumb, i) => (
+              {allImages.map((thumb, i) => (
                  <button 
                    key={i} 
+                   onClick={() => setActiveImage(i)}
                    className={cn(
-                     "border-2 rounded-md overflow-hidden aspect-[3/4] bg-card w-16 md:w-full shrink-0", 
-                     i === 1 ? "border-primary shadow-[0_0_10px_rgba(255,0,153,0.2)]" : "border-transparent opacity-70 hover:opacity-100"
+                     "border-2 rounded-md overflow-hidden aspect-[3/4] bg-card w-16 md:w-full shrink-0 transition-all", 
+                     i === activeImage ? "border-primary shadow-[0_0_10px_rgba(255,0,153,0.2)]" : "border-transparent opacity-70 hover:opacity-100"
                    )}
                  >
                    <img src={thumb} className="w-full h-full object-cover" alt="thumbnail" />
@@ -98,12 +98,14 @@ export default function ProductDetailPage() {
            
            {/* Main Image */}
            <motion.div 
+             key={activeImage}
              initial={{ opacity: 0, x: -20 }}
              animate={{ opacity: 1, x: 0 }}
+             transition={{ duration: 0.3 }}
              className="flex-1 rounded-2xl overflow-hidden border border-primary/20 bg-card relative shadow-[0_0_30px_rgba(255,0,153,0.05)] aspect-[4/5] md:aspect-square"
            >
              <img 
-               src={mainImage} 
+               src={currentDisplayImage} 
                alt={product.name} 
                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
              />

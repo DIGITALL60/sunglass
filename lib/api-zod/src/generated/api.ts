@@ -47,6 +47,7 @@ export const ListProductsResponseItem = zod.object({
   "price": zod.number(),
   "description": zod.string(),
   "image_url": zod.string(),
+  "extra_images": zod.array(zod.string()).optional(),
   "created_at": zod.string(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
@@ -67,6 +68,7 @@ export const CreateProductBody = zod.object({
   "price": zod.number(),
   "description": zod.string(),
   "image_url": zod.string(),
+  "extra_images": zod.array(zod.string()).optional(),
   "variants": zod.array(zod.object({
   "id": zod.number().optional(),
   "name": zod.string(),
@@ -90,6 +92,7 @@ export const GetProductResponse = zod.object({
   "price": zod.number(),
   "description": zod.string(),
   "image_url": zod.string(),
+  "extra_images": zod.array(zod.string()).optional(),
   "created_at": zod.string(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
@@ -113,6 +116,7 @@ export const UpdateProductBody = zod.object({
   "price": zod.number().optional(),
   "description": zod.string().optional(),
   "image_url": zod.string().optional(),
+  "extra_images": zod.array(zod.string()).optional(),
   "variants": zod.array(zod.object({
   "id": zod.number().optional(),
   "name": zod.string(),
@@ -128,6 +132,7 @@ export const UpdateProductResponse = zod.object({
   "price": zod.number(),
   "description": zod.string(),
   "image_url": zod.string(),
+  "extra_images": zod.array(zod.string()).optional(),
   "created_at": zod.string(),
   "variants": zod.array(zod.object({
   "id": zod.number(),

@@ -39,5 +39,6 @@ export async function initDb() {
       created_at TIMESTAMP DEFAULT NOW() NOT NULL
     );
     ALTER TABLE product_variants ADD COLUMN IF NOT EXISTS quantity INTEGER DEFAULT 0 NOT NULL;
+    ALTER TABLE products ADD COLUMN IF NOT EXISTS extra_images TEXT DEFAULT '[]';
   `);
 }

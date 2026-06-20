@@ -10,6 +10,7 @@ export const productsTable = pgTable("products", {
   price: real("price").notNull(),
   description: text("description").notNull(),
   image_url: text("image_url").notNull(),
+  extra_images: text("extra_images").default("[]"),
   created_at: timestamp("created_at").defaultNow().notNull(),
 });
 
