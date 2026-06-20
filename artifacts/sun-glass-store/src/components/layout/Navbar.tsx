@@ -24,7 +24,7 @@ export function Navbar() {
             className="w-12 h-12 object-contain group-hover:drop-shadow-[0_0_10px_rgba(255,0,153,0.6)] transition-all"
             data-testid="img-logo"
           />
-          <span className="font-orbitron font-bold text-lg hidden sm:block tracking-wider text-primary">
+          <span className="font-orbitron font-bold text-sm sm:text-lg tracking-wider text-primary">
             SUN GLASS
           </span>
         </button>

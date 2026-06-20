@@ -22,7 +22,6 @@ export default function HomePage() {
 
   const handleTimeUpdate = () => {
     if (videoRef.current && videoRef.current.duration) {
-      // Si falta 1 segundo o menos para que termine el video, reiniciarlo
       if (videoRef.current.currentTime >= videoRef.current.duration - 1) {
         videoRef.current.currentTime = 0;
         videoRef.current.play();
@@ -34,7 +33,7 @@ export default function HomePage() {
     <>
       <SEO />
       <div className="min-h-[100dvh] flex items-center justify-center relative overflow-hidden">
-        {/* Background video — max quality */}
+        {/* Background video */}
         <video
           ref={videoRef}
           autoPlay
@@ -46,26 +45,25 @@ export default function HomePage() {
           src="/sun.mp4"
         />
 
-        {/* Very subtle full-screen vignette */}
+        {/* Vignette */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20 pointer-events-none" />
 
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-3xl mx-auto pt-20">
-          {/* Dark frosted container around text - reduced padding and opacity to show more video */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: "easeOut" }}
             className="flex flex-col items-center gap-4 px-6 py-8 sm:px-10 sm:py-10 rounded-3xl"
             style={{
-              background: "rgba(0, 0, 0, 0.25)",
-              backdropFilter: "blur(4px)",
-              WebkitBackdropFilter: "blur(4px)",
+              background: "rgba(0, 0, 0, 0.35)",
+              backdropFilter: "blur(6px)",
+              WebkitBackdropFilter: "blur(6px)",
               border: "1px solid rgba(255,0,153,0.15)",
               boxShadow: "0 8px 32px rgba(0,0,0,0.25), inset 0 0 30px rgba(255,0,153,0.02)",
             }}
           >
-            <div className="flex items-center justify-center text-center w-full min-h-[140px] sm:min-h-[120px]">
+            <div className="flex items-center justify-center text-center w-full min-h-[100px] sm:min-h-[120px]">
               <AnimatePresence mode="wait">
                 <motion.h1
                   key={textIndex}
@@ -73,9 +71,9 @@ export default function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4 }}
-                  className="font-orbitron font-black leading-[1.2] text-white"
+                  className="font-orbitron font-black leading-[1.25] text-white"
                   style={{
-                    fontSize: "clamp(1.15rem, 4.5vw, 2.8rem)",
+                    fontSize: "clamp(1.4rem, 5.5vw, 2.8rem)",
                     textShadow: "0 2px 20px rgba(255,0,153,0.5), 0 0 40px rgba(255,0,153,0.2)",
                     letterSpacing: "0.02em",
                   }}
@@ -88,7 +86,7 @@ export default function HomePage() {
             <p
               className="text-white/80 font-medium"
               style={{
-                fontSize: "clamp(0.85rem, 2vw, 1.15rem)",
+                fontSize: "clamp(0.9rem, 2.5vw, 1.15rem)",
                 textShadow: "0 1px 8px rgba(0,0,0,0.6)",
                 maxWidth: "38ch",
               }}
