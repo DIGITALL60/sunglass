@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
   fileFilter: (_req, file, cb) => {
     const allowed = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
     const ext = path.extname(file.originalname).toLowerCase();
@@ -31,7 +31,16 @@ const upload = multer({
 
 const router = Router();
 
-router.post("/", requireAuth, upload.single("image"), (req, res) => {
+router.post("/", requireAuth, (req, res, next) => {
+  upload.single("image")(req, res, (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: "La imagen es demasiado grande. El máximo permitido es 50MB." });
+    } else if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+    next();
+  });
+}, (req, res) => {
   if (!req.file) {
     res.status(400).json({ error: "No se recibió ninguna imagen" });
     return;
