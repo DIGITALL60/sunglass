@@ -1,10 +1,16 @@
 import { Router } from "express";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import { requireAuth } from "../middlewares/auth.js";
 
 // Use process.cwd() — server runs from artifacts/api-server/
 const UPLOADS_DIR = path.join(process.cwd(), "uploads");
+
+// Ensure the uploads directory exists before saving files
+if (!fs.existsSync(UPLOADS_DIR)) {
+  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
