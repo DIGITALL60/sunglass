@@ -71,7 +71,8 @@ export default function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4 }}
-                  className="font-orbitron font-black leading-[1.25] text-white"
+                  className="font-orbitron font-black leading-[1.25] text-white notranslate"
+                  translate="no"
                   style={{
                     fontSize: "clamp(1.4rem, 5.5vw, 2.8rem)",
                     textShadow: "0 2px 20px rgba(255,0,153,0.5), 0 0 40px rgba(255,0,153,0.2)",
