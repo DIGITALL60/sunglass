@@ -38,5 +38,6 @@ export async function initDb() {
       role TEXT DEFAULT 'admin' NOT NULL,
       created_at TIMESTAMP DEFAULT NOW() NOT NULL
     );
+    ALTER TABLE product_variants ADD COLUMN IF NOT EXISTS quantity INTEGER DEFAULT 0 NOT NULL;
   `);
 }

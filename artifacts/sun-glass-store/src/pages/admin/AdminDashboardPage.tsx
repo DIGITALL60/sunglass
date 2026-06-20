@@ -11,9 +11,8 @@ import {
   getGetProductStatsQueryKey,
   getListCategoriesQueryKey,
 } from "@workspace/api-client-react";
-// Override the Product type locally to avoid typescript errors while orval generates the types.
-type ProductWithVariants = any;
 import { Button } from "@/components/ui/button";
+type ProductWithVariants = any;
 import { formatPrice } from "@/lib/format";
 import { getFullImgUrl } from "@/lib/utils";
 import { LogOut, Plus, Edit, Trash2, Upload, ImageIcon, Package, PackageOpen } from "lucide-react";
