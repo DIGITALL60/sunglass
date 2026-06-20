@@ -233,31 +233,28 @@ function ProductFormDialog({
     setUploadError("");
 
     try {
-      const token = localStorage.getItem("admin_token");
-      const baseUrl = import.meta.env.VITE_API_URL ?? "";
-      
       const uploadedUrls: string[] = [];
-      
+
       for (const file of files) {
         const formData = new FormData();
-        formData.append("image", file);
+        formData.append("file", file);
+        formData.append("upload_preset", "onarbq3w"); // Unsigned preset de Cloudinary
+        formData.append("folder", "sunglass");
 
-        const res = await fetch(`${baseUrl}/api/upload`, {
+        const res = await fetch("https://api.cloudinary.com/v1_1/dafxkpvrz/image/upload", {
           method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
           body: formData,
         });
 
         if (!res.ok) {
           const err = await res.json();
-          throw new Error(err.error || "Error al subir imagen");
+          throw new Error(err.error?.message || "Error al subir imagen");
         }
 
         const data = await res.json();
-        const finalUrl = data.url.startsWith("http") ? data.url : `${baseUrl}${data.url}`;
-        uploadedUrls.push(finalUrl);
+        uploadedUrls.push(data.secure_url);
       }
-      
+
       if (isExtra) {
         setExtraImages(prev => [...prev, ...uploadedUrls]);
       } else {
@@ -267,7 +264,6 @@ function ProductFormDialog({
       setUploadError(err instanceof Error ? err.message : "Error al subir imagen");
     } finally {
       setUploading(false);
-      // Reset input
       e.target.value = '';
     }
   };
