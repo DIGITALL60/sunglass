@@ -136,7 +136,7 @@ export default function AdminDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {products.map(p => (
+                {products.map((p: any) => (
                   <tr key={p.id} className="border-b border-border hover:bg-secondary/20 transition-colors" data-testid={`row-product-${p.id}`}>
                     <td className="p-4">
                       <div className="flex items-center gap-3">

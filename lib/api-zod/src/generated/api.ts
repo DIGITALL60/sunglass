@@ -51,7 +51,8 @@ export const ListProductsResponseItem = zod.object({
   "variants": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string(),
-  "available": zod.boolean()
+  "available": zod.boolean(),
+  "quantity": zod.number().optional()
 })).optional()
 })
 export const ListProductsResponse = zod.array(ListProductsResponseItem)
@@ -69,7 +70,8 @@ export const CreateProductBody = zod.object({
   "variants": zod.array(zod.object({
   "id": zod.number().optional(),
   "name": zod.string(),
-  "available": zod.boolean()
+  "available": zod.boolean(),
+  "quantity": zod.number().optional()
 })).optional()
 })
 
@@ -92,7 +94,8 @@ export const GetProductResponse = zod.object({
   "variants": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string(),
-  "available": zod.boolean()
+  "available": zod.boolean(),
+  "quantity": zod.number().optional()
 })).optional()
 })
 
@@ -113,7 +116,8 @@ export const UpdateProductBody = zod.object({
   "variants": zod.array(zod.object({
   "id": zod.number().optional(),
   "name": zod.string(),
-  "available": zod.boolean()
+  "available": zod.boolean(),
+  "quantity": zod.number().optional()
 })).optional()
 })
 
@@ -128,7 +132,8 @@ export const UpdateProductResponse = zod.object({
   "variants": zod.array(zod.object({
   "id": zod.number(),
   "name": zod.string(),
-  "available": zod.boolean()
+  "available": zod.boolean(),
+  "quantity": zod.number().optional()
 })).optional()
 })
 

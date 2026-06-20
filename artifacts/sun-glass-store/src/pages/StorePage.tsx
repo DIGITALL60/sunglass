@@ -56,7 +56,7 @@ export default function StorePage() {
           >
             Todas
           </button>
-          {categories.map((c) => (
+          {["Todas", ...categories].map((c: any) => (
             <button
               key={c}
               className={`px-4 py-2 rounded-full text-sm font-orbitron border transition-all ${
@@ -64,7 +64,7 @@ export default function StorePage() {
                   ? "bg-primary text-primary-foreground border-primary"
                   : "border-primary/30 text-muted-foreground hover:border-primary hover:text-primary"
               }`}
-              onClick={() => { setCategory(c); setFiltersOpen(false); }}
+              onClick={() => { setCategory(c === "Todas" ? undefined : c); setFiltersOpen(false); }}
               data-testid={`filter-${c}`}
             >
               {c}
@@ -207,7 +207,7 @@ export default function StorePage() {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-2 xl:grid-cols-3 gap-3 sm:gap-5">
-              {filteredProducts.map((product, i) => (
+              {filteredProducts.map((product: any, i: number) => (
                 <motion.div
                   key={product.id}
                   initial={{ opacity: 0, y: 20 }}

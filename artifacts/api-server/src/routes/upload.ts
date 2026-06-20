@@ -44,11 +44,12 @@ const router = Router();
 router.post("/", requireAuth, (req, res, next) => {
   upload.single("image")(req, res, (err) => {
     if (err instanceof multer.MulterError) {
-      return res.status(400).json({ error: "La imagen es demasiado grande. El máximo permitido es 50MB." });
+      res.status(400).json({ error: "La imagen es demasiado grande. El máximo permitido es 50MB." });
     } else if (err) {
-      return res.status(400).json({ error: err.message });
+      res.status(400).json({ error: err.message });
+    } else {
+      next();
     }
-    next();
   });
 }, async (req, res) => {
   if (!req.file) {

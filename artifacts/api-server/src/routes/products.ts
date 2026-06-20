@@ -144,7 +144,7 @@ router.get("/:id", async (req, res) => {
 // PUT /products/:id
 router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     if (isNaN(id)) {
       res.status(400).json({ error: "ID inválido" });
       return;
@@ -199,7 +199,7 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
 // DELETE /products/:id
 router.delete("/:id", requireAuth, async (req: AuthRequest, res) => {
   try {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     if (isNaN(id)) {
       res.status(400).json({ error: "ID inválido" });
       return;
