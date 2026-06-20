@@ -14,6 +14,7 @@ import {
 } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
+import { getFullImgUrl } from "@/lib/utils";
 import { LogOut, Plus, Edit, Trash2, Upload, ImageIcon } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -134,7 +135,7 @@ export default function AdminDashboardPage() {
                   <tr key={p.id} className="border-b border-border hover:bg-secondary/20 transition-colors" data-testid={`row-product-${p.id}`}>
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        <img src={p.image_url} alt={p.name} className="w-12 h-12 rounded object-cover border border-primary/20 shrink-0" />
+                        <img src={getFullImgUrl(p.image_url)} alt={p.name} className="w-12 h-12 rounded object-cover border border-primary/20 shrink-0" />
                         <span className="font-bold text-sm">{p.name}</span>
                       </div>
                     </td>
@@ -237,7 +238,9 @@ function ProductFormDialog({
       }
 
       const data = await res.json();
-      setImgUrl(data.url);
+      // Ensure the image URL points to the backend, not the Vercel frontend
+      const finalUrl = data.url.startsWith("http") ? data.url : `${baseUrl}${data.url}`;
+      setImgUrl(finalUrl);
     } catch (err: unknown) {
       setUploadError(err instanceof Error ? err.message : "Error al subir imagen");
     } finally {

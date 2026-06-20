@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
+import { getFullImgUrl } from "@/lib/utils";
 import { X, Minus, Plus, Trash2, MessageCircle, Truck, CreditCard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -72,7 +73,9 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               ) : (
                 cart.map((item) => (
                   <div key={item.id} className="flex gap-4 bg-secondary/50 p-3 rounded-lg border border-primary/10" data-testid={`cart-item-${item.id}`}>
-                    <img src={item.image_url} alt={item.name} className="w-20 h-20 object-cover rounded-md border border-primary/20 flex-shrink-0" />
+                    <div className="w-20 h-20 bg-primary/5 rounded-xl border border-primary/20 shrink-0 overflow-hidden">
+                      <img src={getFullImgUrl(item.image_url)} alt={item.name} className="w-full h-full object-cover mix-blend-multiply" />
+                    </div>
                     <div className="flex-1 flex flex-col min-w-0">
                       <h3 className="font-bold text-sm line-clamp-2 mb-1">{item.name}</h3>
                       <p className="text-primary text-sm font-orbitron mb-2">{formatPrice(item.price)}</p>

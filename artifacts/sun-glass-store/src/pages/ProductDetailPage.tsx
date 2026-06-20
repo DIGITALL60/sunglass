@@ -4,6 +4,7 @@ import { getGetProductQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
+import { getFullImgUrl } from "@/lib/utils";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -45,9 +46,9 @@ export default function ProductDetailPage() {
           className="aspect-square rounded-2xl overflow-hidden border border-primary/20 bg-card relative shadow-[0_0_30px_rgba(255,0,153,0.05)]"
         >
           <img 
-            src={product.image_url} 
+            src={getFullImgUrl(product.image_url)} 
             alt={product.name} 
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
           />
         </motion.div>
 

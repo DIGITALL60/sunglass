@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
+import { getFullImgUrl } from "@/lib/utils";
 
 export default function StorePage() {
   const [search, setSearch] = useState("");
@@ -217,7 +218,7 @@ export default function StorePage() {
                 >
                   <Link href={`/producto/${product.id}`} className="relative block overflow-hidden" style={{ paddingBottom: "100%" }}>
                     <img
-                      src={product.image_url}
+                      src={getFullImgUrl(product.image_url)}
                       alt={product.name}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
