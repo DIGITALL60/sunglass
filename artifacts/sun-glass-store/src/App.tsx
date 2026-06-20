@@ -13,6 +13,7 @@ import StorePage from "@/pages/StorePage";
 import ProductDetailPage from "@/pages/ProductDetailPage";
 import AdminLoginPage from "@/pages/admin/AdminLoginPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+import AdminStockPage from "@/pages/admin/AdminStockPage";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ function Router() {
     <Switch>
       <Route path="/admin/login" component={AdminLoginPage} />
       <Route path="/admin/dashboard" component={AdminDashboardPage} />
+      <Route path="/admin/stock" component={AdminStockPage} />
       
       {/* Public Routes with Layout */}
       <Route path="/">

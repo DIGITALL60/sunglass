@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import {
   useGetProductStats,
   useListProducts,
@@ -16,7 +16,7 @@ type ProductWithVariants = any;
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { getFullImgUrl } from "@/lib/utils";
-import { LogOut, Plus, Edit, Trash2, Upload, ImageIcon } from "lucide-react";
+import { LogOut, Plus, Edit, Trash2, Upload, ImageIcon, Package, PackageOpen } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -80,8 +80,13 @@ export default function AdminDashboardPage() {
 
         <nav className="flex-1 space-y-2">
           <Button variant="secondary" className="w-full justify-start font-orbitron tracking-wider bg-primary/10 text-primary hover:bg-primary/20 border border-primary/30">
-            Productos
+            <Package className="w-4 h-4 mr-2" /> Productos
           </Button>
+          <Link href="/admin/stock">
+            <Button variant="ghost" className="w-full justify-start font-orbitron tracking-wider hover:text-primary hover:bg-primary/10">
+              <PackageOpen className="w-4 h-4 mr-2" /> Stock
+            </Button>
+          </Link>
           <Button variant="ghost" className="w-full justify-start font-orbitron tracking-wider hover:text-primary hover:bg-primary/10" onClick={openNew}>
             <Plus className="w-4 h-4 mr-2" /> Nuevo Producto
           </Button>
