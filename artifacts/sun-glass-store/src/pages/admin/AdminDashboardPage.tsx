@@ -238,20 +238,22 @@ function ProductFormDialog({
       for (const file of files) {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "onarbq3w"); // Unsigned preset de Cloudinary
-        formData.append("folder", "sunglass");
+        formData.append("upload_preset", "onarbq3w");
+
+        console.log("[Upload] Intentando subir a Cloudinary:", file.name, file.size);
 
         const res = await fetch("https://api.cloudinary.com/v1_1/dafxkpvrz/image/upload", {
           method: "POST",
           body: formData,
         });
 
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error?.message || "Error al subir imagen");
+        const data = await res.json();
+        console.log("[Upload] Respuesta de Cloudinary:", data);
+
+        if (!res.ok || data.error) {
+          throw new Error(data.error?.message || JSON.stringify(data.error) || "Error al subir imagen");
         }
 
-        const data = await res.json();
         uploadedUrls.push(data.secure_url);
       }
 
@@ -261,6 +263,7 @@ function ProductFormDialog({
         setImgUrl(uploadedUrls[0]);
       }
     } catch (err: unknown) {
+      console.error("[Upload] Error:", err);
       setUploadError(err instanceof Error ? err.message : "Error al subir imagen");
     } finally {
       setUploading(false);
