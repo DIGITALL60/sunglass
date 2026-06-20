@@ -16,7 +16,7 @@ export function Navbar() {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-40 h-20 bg-glass border-b border-border px-6 flex items-center justify-between">
+      <nav className="fixed top-0 left-0 right-0 z-40 h-20 bg-glass border-b border-border px-4 sm:px-6 flex items-center justify-between">
         <button onClick={handleLogoClick} className="flex items-center gap-4 group cursor-pointer bg-transparent border-0 p-0">
           <img
             src="/logo-nobg.png"
@@ -29,7 +29,7 @@ export function Navbar() {
           </span>
         </button>
 
-        <div className="flex items-center gap-8 font-orbitron text-sm font-semibold tracking-wide">
+        <div className="flex items-center gap-4 sm:gap-8 font-orbitron text-xs sm:text-sm font-semibold tracking-wide">
           <Link href="/" className="text-primary hover:text-primary/80 transition-colors">INICIO</Link>
           <Link href="/tienda" className="text-primary hover:text-primary/80 transition-colors">TIENDA</Link>
 
