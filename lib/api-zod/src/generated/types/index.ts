@@ -19,3 +19,5 @@ export * from './product';
 export * from './productInput';
 export * from './productStats';
 export * from './productUpdate';
+export * from './productVariant';
+export * from './productVariantInput';

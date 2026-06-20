@@ -5,6 +5,7 @@
  * Sun Glass Accesorios - E-Commerce API
  * OpenAPI spec version: 0.1.0
  */
+import type { ProductVariant } from './productVariant';
 
 export interface Product {
   id: number;
@@ -14,4 +15,5 @@ export interface Product {
   description: string;
   image_url: string;
   created_at: string;
+  variants?: ProductVariant[];
 }

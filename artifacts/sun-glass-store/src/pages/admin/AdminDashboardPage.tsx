@@ -10,8 +10,9 @@ import {
   getListProductsQueryKey,
   getGetProductStatsQueryKey,
   getListCategoriesQueryKey,
-  Product
 } from "@workspace/api-client-react";
+// Override the Product type locally to avoid typescript errors while orval generates the types.
+type ProductWithVariants = any;
 import { Button } from "@/components/ui/button";
 import { formatPrice } from "@/lib/format";
 import { getFullImgUrl } from "@/lib/utils";
@@ -26,7 +27,7 @@ export default function AdminDashboardPage() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editingProduct, setEditingProduct] = useState<ProductWithVariants | null>(null);
 
   useEffect(() => {
     const token = localStorage.getItem("admin_token");
@@ -58,7 +59,7 @@ export default function AdminDashboardPage() {
     }
   };
 
-  const openEdit = (product: Product) => {
+  const openEdit = (product: ProductWithVariants) => {
     setEditingProduct(product);
     setIsFormOpen(true);
   };
@@ -179,7 +180,7 @@ function ProductFormDialog({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  product: Product | null;
+  product: ProductWithVariants | null;
   categories: string[];
 }) {
   const queryClient = useQueryClient();
@@ -191,6 +192,7 @@ function ProductFormDialog({
   const [price, setPrice] = useState("");
   const [desc, setDesc] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const [variants, setVariants] = useState<{ id?: number, name: string, available: boolean }[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
 
@@ -202,6 +204,7 @@ function ProductFormDialog({
       setDesc(product.description);
       setImgUrl(product.image_url);
       setNewCat("");
+      setVariants(product.variants || []);
     } else {
       setName("");
       setCategory("");
@@ -209,6 +212,7 @@ function ProductFormDialog({
       setDesc("");
       setImgUrl("");
       setNewCat("");
+      setVariants([]);
     }
     setUploadError("");
   }, [product, isOpen]);
@@ -261,7 +265,7 @@ function ProductFormDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const finalCategory = newCat.trim() !== "" ? newCat.trim() : category;
-    const data = { name, category: finalCategory, price: Number(price), description: desc, image_url: imgUrl };
+    const data = { name, category: finalCategory, price: Number(price), description: desc, image_url: imgUrl, variants };
     if (product) {
       updateMut.mutate({ id: product.id, data });
     } else {
@@ -394,6 +398,55 @@ function ProductFormDialog({
               className="bg-background/50 border-primary/30 h-24 resize-none"
               data-testid="textarea-product-description"
             />
+          </div>
+
+          <div className="space-y-3 pt-4 border-t border-primary/20">
+            <div className="flex items-center justify-between">
+               <Label className="text-xs font-orbitron text-primary/70">VARIANTES / MODELOS</Label>
+               <Button type="button" variant="outline" size="sm" onClick={() => setVariants([...variants, { name: "", available: true }])} className="text-xs h-7 px-2 border-primary/30 text-primary hover:bg-primary/10">
+                 <Plus className="w-3 h-3 mr-1" /> Modelo
+               </Button>
+            </div>
+            
+            {variants.length > 0 ? (
+               <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                 {variants.map((v, i) => (
+                    <div key={i} className="flex items-center gap-2 bg-background/30 p-2 rounded border border-primary/10">
+                       <Input 
+                         value={v.name} 
+                         onChange={e => {
+                            const newV = [...variants];
+                            newV[i].name = e.target.value;
+                            setVariants(newV);
+                         }} 
+                         placeholder="Ej: Zayu" 
+                         className="bg-background border-primary/20 text-sm h-8"
+                         required
+                       />
+                       <label className="flex items-center gap-2 text-xs shrink-0 cursor-pointer font-orbitron">
+                         <input 
+                           type="checkbox" 
+                           checked={v.available} 
+                           onChange={e => {
+                              const newV = [...variants];
+                              newV[i].available = e.target.checked;
+                              setVariants(newV);
+                           }} 
+                           className="accent-primary"
+                         />
+                         En stock
+                       </label>
+                       <Button type="button" variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10 shrink-0 h-8 w-8" onClick={() => {
+                          setVariants(variants.filter((_, idx) => idx !== i));
+                       }}>
+                          <Trash2 className="w-4 h-4" />
+                       </Button>
+                    </div>
+                 ))}
+               </div>
+            ) : (
+               <p className="text-xs text-muted-foreground italic">No hay variantes configuradas. (Se creará como un producto simple)</p>
+            )}
           </div>
 
           <div className="flex justify-end gap-3 pt-2">

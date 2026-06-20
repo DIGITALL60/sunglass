@@ -5,6 +5,7 @@
  * Sun Glass Accesorios - E-Commerce API
  * OpenAPI spec version: 0.1.0
  */
+import type { ProductVariantInput } from './productVariantInput';
 
 export interface ProductInput {
   name: string;
@@ -12,4 +13,5 @@ export interface ProductInput {
   price: number;
   description: string;
   image_url: string;
+  variants?: ProductVariantInput[];
 }

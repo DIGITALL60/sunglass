@@ -291,6 +291,10 @@ components:
           type: string
         created_at:
           type: string
+        variants:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductVariant"
 
     ProductInput:
       type: object
@@ -306,6 +310,10 @@ components:
           type: string
         image_url:
           type: string
+        variants:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductVariantInput"
 
     ProductUpdate:
       type: object
@@ -320,6 +328,32 @@ components:
           type: string
         image_url:
           type: string
+        variants:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductVariantInput"
+
+    ProductVariant:
+      type: object
+      required: [id, name, available]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        available:
+          type: boolean
+
+    ProductVariantInput:
+      type: object
+      required: [name, available]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        available:
+          type: boolean
 
     ProductStats:
       type: object

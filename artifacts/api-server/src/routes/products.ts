@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { db, productsTable } from "@workspace/db";
-import { eq, ilike, gte, lte, and, desc, asc, sql } from "drizzle-orm";
+import { db, productsTable, productVariantsTable } from "@workspace/db";
+import { eq, ilike, gte, lte, and, desc, asc, sql, inArray } from "drizzle-orm";
 import { requireAuth, AuthRequest } from "../middlewares/auth.js";
 import {
   ListProductsQueryParams,
@@ -72,7 +72,18 @@ router.get("/", async (req, res) => {
       results = await baseQuery.orderBy(desc(productsTable.created_at));
     }
 
-    res.json(results);
+    if (results.length > 0) {
+      const productIds = results.map(p => p.id);
+      const allVariants = await db.select().from(productVariantsTable).where(inArray(productVariantsTable.product_id, productIds));
+      
+      const productsWithVariants = results.map(p => ({
+        ...p,
+        variants: allVariants.filter(v => v.product_id === p.id).map(v => ({ id: v.id, name: v.name, available: v.available }))
+      }));
+      res.json(productsWithVariants);
+    } else {
+      res.json([]);
+    }
   } catch {
     res.status(500).json({ error: "Error al obtener productos" });
   }
@@ -87,8 +98,20 @@ router.post("/", requireAuth, async (req: AuthRequest, res) => {
       return;
     }
 
-    const [product] = await db.insert(productsTable).values(parsed.data).returning();
-    res.status(201).json(product);
+    const { variants, ...productData } = parsed.data;
+    const [product] = await db.insert(productsTable).values(productData).returning();
+
+    let createdVariants: any[] = [];
+    if (variants && variants.length > 0) {
+      const variantsToInsert = variants.map(v => ({
+        product_id: product.id,
+        name: v.name,
+        available: v.available
+      }));
+      createdVariants = await db.insert(productVariantsTable).values(variantsToInsert).returning();
+    }
+
+    res.status(201).json({ ...product, variants: createdVariants.map(v => ({ id: v.id, name: v.name, available: v.available })) });
   } catch {
     res.status(500).json({ error: "Error al crear producto" });
   }
@@ -109,7 +132,9 @@ router.get("/:id", async (req, res) => {
       return;
     }
 
-    res.json(products[0]);
+    const product = products[0];
+    const variants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.product_id, id));
+    res.json({ ...product, variants: variants.map(v => ({ id: v.id, name: v.name, available: v.available })) });
   } catch {
     res.status(500).json({ error: "Error al obtener producto" });
   }
@@ -136,13 +161,34 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
       return;
     }
 
-    const [updated] = await db
-      .update(productsTable)
-      .set(parsed.data)
-      .where(eq(productsTable.id, id))
-      .returning();
+    const { variants, ...productData } = parsed.data;
+    let updatedProduct = existing[0];
 
-    res.json(updated);
+    if (Object.keys(productData).length > 0) {
+      const [updated] = await db
+        .update(productsTable)
+        .set(productData)
+        .where(eq(productsTable.id, id))
+        .returning();
+      updatedProduct = updated;
+    }
+
+    let finalVariants: any[] = [];
+    if (variants !== undefined) {
+      await db.delete(productVariantsTable).where(eq(productVariantsTable.product_id, id));
+      if (variants.length > 0) {
+        const variantsToInsert = variants.map(v => ({
+          product_id: id,
+          name: v.name,
+          available: v.available
+        }));
+        finalVariants = await db.insert(productVariantsTable).values(variantsToInsert).returning();
+      }
+    } else {
+      finalVariants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.product_id, id));
+    }
+
+    res.json({ ...updatedProduct, variants: finalVariants.map(v => ({ id: v.id, name: v.name, available: v.available })) });
   } catch {
     res.status(500).json({ error: "Error al actualizar producto" });
   }

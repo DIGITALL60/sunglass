@@ -1,17 +1,21 @@
+import { useState } from "react";
 import { useParams, Link } from "wouter";
 import { useGetProduct } from "@workspace/api-client-react";
 import { getGetProductQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
-import { getFullImgUrl } from "@/lib/utils";
-import { ArrowLeft, ShoppingCart } from "lucide-react";
+import { getFullImgUrl, cn } from "@/lib/utils";
+import { ShoppingCart, Minus, Plus, Info, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const id = Number(params.id);
   const addToCart = useCartStore((state) => state.addToCart);
+
+  const [quantity, setQuantity] = useState(1);
+  const [selectedModel, setSelectedModel] = useState<string | null>(null);
 
   const { data: product, isLoading } = useGetProduct(id, {
     query: {
@@ -33,52 +37,145 @@ export default function ProductDetailPage() {
     );
   }
 
+  const mainImage = getFullImgUrl(product.image_url);
+  // Mock thumbnails to match the design requested
+  const thumbnails = [mainImage, mainImage, mainImage, mainImage, mainImage];
+
+  const productVariants = (product as any)?.variants || [];
+  
+  // Set initial selected model if available
+  if (!selectedModel && productVariants.length > 0) {
+    const firstAvailable = productVariants.find((v: any) => v.available);
+    setSelectedModel(firstAvailable ? firstAvailable.name : productVariants[0].name);
+  }
+
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto">
-      <Link href="/tienda" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 font-orbitron text-sm">
-        <ArrowLeft className="w-4 h-4" /> VOLVER
-      </Link>
+      {/* Breadcrumbs */}
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8 font-sans">
+        <Link href="/" className="hover:text-primary transition-colors cursor-pointer">Inicio</Link>
+        <ChevronRight className="w-4 h-4" />
+        <Link href="/tienda" className="hover:text-primary transition-colors uppercase cursor-pointer">{product.category}</Link>
+        <ChevronRight className="w-4 h-4" />
+        <span className="text-foreground font-medium">{product.name}</span>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
-        <motion.div 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="aspect-square rounded-2xl overflow-hidden border border-primary/20 bg-card relative shadow-[0_0_30px_rgba(255,0,153,0.05)]"
-        >
-          <img 
-            src={getFullImgUrl(product.image_url)} 
-            alt={product.name} 
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-          />
-        </motion.div>
+        {/* Left: Images */}
+        <div className="flex flex-col-reverse md:flex-row gap-4">
+           {/* Thumbnails */}
+           <div className="flex md:flex-col gap-3 md:w-20 shrink-0 overflow-x-auto md:overflow-visible">
+              {thumbnails.map((thumb, i) => (
+                 <button 
+                   key={i} 
+                   className={cn(
+                     "border-2 rounded-md overflow-hidden aspect-[3/4] bg-card w-16 md:w-full shrink-0", 
+                     i === 1 ? "border-primary shadow-[0_0_10px_rgba(255,0,153,0.2)]" : "border-transparent opacity-70 hover:opacity-100"
+                   )}
+                 >
+                   <img src={thumb} className="w-full h-full object-cover" alt="thumbnail" />
+                 </button>
+              ))}
+           </div>
+           
+           {/* Main Image */}
+           <motion.div 
+             initial={{ opacity: 0, x: -20 }}
+             animate={{ opacity: 1, x: 0 }}
+             className="flex-1 rounded-2xl overflow-hidden border border-primary/20 bg-card relative shadow-[0_0_30px_rgba(255,0,153,0.05)] aspect-[4/5] md:aspect-square"
+           >
+             <img 
+               src={mainImage} 
+               alt={product.name} 
+               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+             />
+           </motion.div>
+        </div>
 
+        {/* Right: Details */}
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col justify-center"
+          className="flex flex-col font-sans"
         >
-          <div className="inline-block bg-primary/10 border border-primary/30 text-primary px-4 py-1.5 rounded-full font-orbitron text-sm font-bold tracking-widest mb-6 w-fit">
-            {product.category}
-          </div>
+          <h1 className="text-3xl md:text-4xl font-normal mb-4 font-sans">{product.name}</h1>
           
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">{product.name}</h1>
-          
-          <p className="font-orbitron text-3xl font-black text-primary drop-shadow-[0_0_10px_rgba(255,0,153,0.3)] mb-8">
-            {formatPrice(product.price)}
-          </p>
-          
-          <div className="prose prose-invert max-w-none text-muted-foreground text-lg mb-10">
-            <p>{product.description}</p>
+          {/* Price section */}
+          <div className="flex flex-wrap items-center gap-3 mb-8">
+            <span className="text-3xl font-bold text-foreground">
+              {formatPrice(product.price)}
+            </span>
+            <span className="text-xl text-muted-foreground line-through font-medium">
+              {formatPrice(product.price * 1.15)}
+            </span>
+            <span className="text-xs font-bold bg-white text-black px-2 py-0.5 rounded border border-gray-300 tracking-wider">
+              15% OFF
+            </span>
           </div>
 
+          {/* Models */}
+          {productVariants.length > 0 && (
+            <div className="mb-8">
+              <h3 className="font-bold mb-3 text-sm uppercase tracking-wide">Modelo</h3>
+              <div className="flex flex-wrap gap-2">
+                {productVariants.map((m: any) => (
+                   <button
+                     key={m.name}
+                     disabled={!m.available}
+                     onClick={() => setSelectedModel(m.name)}
+                     className={cn(
+                       "px-3 py-1.5 text-xs font-medium rounded-md border transition-colors",
+                       !m.available && "opacity-40 cursor-not-allowed text-muted-foreground relative after:absolute after:left-0 after:top-1/2 after:w-full after:h-[1px] after:bg-current",
+                       m.available && selectedModel === m.name && "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white",
+                       m.available && selectedModel !== m.name && "bg-card text-foreground hover:border-foreground/30 border-border"
+                     )}
+                   >
+                     {m.name}
+                   </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quantity */}
+          <div className="mb-8">
+            <h3 className="font-bold mb-3 text-sm uppercase tracking-wide">Cantidad</h3>
+            <div className="flex items-center border border-border rounded-md w-fit bg-card">
+              <button 
+                onClick={() => setQuantity(Math.max(1, quantity - 1))} 
+                className="p-3 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+              >
+                <Minus className="w-4 h-4" />
+              </button>
+              <span className="w-12 text-center font-medium">{quantity}</span>
+              <button 
+                onClick={() => setQuantity(quantity + 1)} 
+                className="p-3 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+              >
+                <Plus className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Add to cart */}
           <Button 
-            size="lg" 
-            className="h-14 text-lg font-orbitron tracking-widest bg-primary text-primary-foreground hover:bg-primary/90 glow-hover w-full sm:w-auto"
-            onClick={() => addToCart(product)}
+            className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none"
+            onClick={() => {
+               for(let i=0; i<quantity; i++) {
+                 addToCart(product);
+               }
+            }}
           >
-            <ShoppingCart className="w-5 h-5 mr-3" />
-            AGREGAR AL CARRITO
+            Agregar al carrito
           </Button>
+
+          {/* Info Alert */}
+          <div className="bg-muted/50 rounded-lg p-4 flex gap-3 text-sm text-muted-foreground border border-border/50">
+            <Info className="w-5 h-5 shrink-0 text-yellow-500 mt-0.5" />
+            <p className="leading-relaxed">
+              Tenés hasta 24 horas para abonar. Enviar el comprobante de pago: WhatsApp 11 5001-6108 con numero de orden <span className="inline-block ml-1">👍</span>
+            </p>
+          </div>
         </motion.div>
       </div>
     </div>
