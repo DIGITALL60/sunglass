@@ -50,9 +50,9 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto">
+    <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto font-orbitron">
       {/* Breadcrumbs */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8 font-sans">
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
         <Link href="/" className="hover:text-primary transition-colors cursor-pointer">Inicio</Link>
         <ChevronRight className="w-4 h-4" />
         <Link href="/tienda" className="hover:text-primary transition-colors uppercase cursor-pointer">{product.category}</Link>
@@ -96,9 +96,9 @@ export default function ProductDetailPage() {
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex flex-col font-sans"
+          className="flex flex-col"
         >
-          <h1 className="text-3xl md:text-4xl font-normal mb-4 font-sans">{product.name}</h1>
+          <h1 className="text-3xl md:text-4xl font-normal mb-4">{product.name}</h1>
           
           {/* Price section */}
           <div className="flex flex-wrap items-center gap-3 mb-8">
@@ -159,7 +159,7 @@ export default function ProductDetailPage() {
 
           {/* Add to cart */}
           <Button 
-            className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none"
+            className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none font-orbitron tracking-wider"
             onClick={() => {
                for(let i=0; i<quantity; i++) {
                  addToCart(product);
@@ -168,14 +168,6 @@ export default function ProductDetailPage() {
           >
             Agregar al carrito
           </Button>
-
-          {/* Info Alert */}
-          <div className="bg-muted/50 rounded-lg p-4 flex gap-3 text-sm text-muted-foreground border border-border/50">
-            <Info className="w-5 h-5 shrink-0 text-yellow-500 mt-0.5" />
-            <p className="leading-relaxed">
-              Tenés hasta 24 horas para abonar. Enviar el comprobante de pago: WhatsApp 11 5001-6108 con numero de orden <span className="inline-block ml-1">👍</span>
-            </p>
-          </div>
         </motion.div>
       </div>
     </div>
