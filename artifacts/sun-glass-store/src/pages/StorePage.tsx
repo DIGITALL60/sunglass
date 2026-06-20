@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
 import { getFullImgUrl } from "@/lib/utils";
+import { Product } from "@workspace/api-client-react";
+import { SEO } from "@/components/SEO";
 
 export default function StorePage() {
   const [search, setSearch] = useState("");
@@ -97,7 +99,9 @@ export default function StorePage() {
   );
 
   return (
-    <div className="min-h-[100dvh] bg-[#FF0099]/10 pt-24 pb-20 px-4 sm:px-6">
+    <>
+      <SEO title="Tienda" description="Explora nuestra tienda de llaveros y accesorios." />
+      <div className="min-h-[100dvh] bg-[#FF0099]/10 pt-24 pb-20 px-4 sm:px-6">
       <div className="max-w-7xl mx-auto">
         {/* Header row */}
       <div className="flex items-center justify-between gap-3 mb-6">
@@ -256,5 +260,6 @@ export default function StorePage() {
       </div>
       </div>
     </div>
+    </>
   );
 }

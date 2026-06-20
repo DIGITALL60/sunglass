@@ -45,7 +45,7 @@ export default function AdminStockPage() {
         description: product.description,
         image_url: product.image_url,
         variants: updatedVariants
-      }
+      } as any
     });
   };
 

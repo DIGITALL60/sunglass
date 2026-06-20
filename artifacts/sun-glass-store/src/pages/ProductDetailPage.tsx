@@ -8,6 +8,7 @@ import { formatPrice } from "@/lib/format";
 import { getFullImgUrl, cn } from "@/lib/utils";
 import { ShoppingCart, Minus, Plus, Info, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { SEO } from "@/components/SEO";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -25,15 +26,23 @@ export default function ProductDetailPage() {
   });
 
   if (isLoading) {
-    return <div className="min-h-screen pt-32 px-6 max-w-6xl mx-auto"><div className="h-96 bg-card/50 animate-pulse rounded-2xl border border-primary/10"></div></div>;
+    return (
+      <>
+        <SEO title="Cargando Producto" />
+        <div className="min-h-screen pt-32 px-6 max-w-6xl mx-auto"><div className="h-96 bg-card/50 animate-pulse rounded-2xl border border-primary/10"></div></div>
+      </>
+    );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen pt-32 px-6 flex flex-col items-center justify-center">
+      <>
+        <SEO title="Producto no encontrado" />
+        <div className="min-h-screen pt-32 px-6 flex flex-col items-center justify-center">
         <h2 className="font-orbitron text-2xl text-destructive mb-4">Producto no encontrado</h2>
         <Link href="/tienda"><Button variant="outline">Volver a la tienda</Button></Link>
       </div>
+      </>
     );
   }
 
@@ -53,7 +62,13 @@ export default function ProductDetailPage() {
   const maxStock = selectedVariantObj?.quantity ?? 99;
 
   return (
-    <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto font-orbitron">
+    <>
+      <SEO 
+        title={product.name} 
+        description={product.description ? product.description.substring(0, 150) : "Detalles exclusivos del producto en Sun Glass"} 
+        image={mainImage} 
+      />
+      <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto font-orbitron">
       {/* Breadcrumbs */}
       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
         <Link href="/" className="hover:text-primary transition-colors cursor-pointer">Inicio</Link>
@@ -177,10 +192,8 @@ export default function ProductDetailPage() {
             className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none font-orbitron tracking-wider disabled:opacity-50"
             disabled={maxStock === 0}
             onClick={() => {
-               const variant = selectedVariantObj ? { id: selectedVariantObj.id, name: selectedVariantObj.name } : undefined;
                for(let i=0; i<quantity; i++) {
-                 // addToCart logic will need to handle selected variants properly if not already done.
-                 addToCart({ ...product, selectedVariant: variant });
+                 addToCart(product);
                }
             }}
           >
@@ -189,5 +202,6 @@ export default function ProductDetailPage() {
         </motion.div>
       </div>
     </div>
+    </>
   );
 }
