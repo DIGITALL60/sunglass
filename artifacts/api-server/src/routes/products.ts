@@ -78,7 +78,7 @@ router.get("/", async (req, res) => {
       
       const productsWithVariants = results.map(p => ({
         ...p,
-        variants: allVariants.filter(v => v.product_id === p.id).map(v => ({ id: v.id, name: v.name, available: v.available }))
+        variants: allVariants.filter(v => v.product_id === p.id).map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity }))
       }));
       res.json(productsWithVariants);
     } else {
@@ -106,12 +106,13 @@ router.post("/", requireAuth, async (req: AuthRequest, res) => {
       const variantsToInsert = variants.map(v => ({
         product_id: product.id,
         name: v.name,
-        available: v.available
+        available: v.available,
+        quantity: v.quantity ?? 0
       }));
       createdVariants = await db.insert(productVariantsTable).values(variantsToInsert).returning();
     }
 
-    res.status(201).json({ ...product, variants: createdVariants.map(v => ({ id: v.id, name: v.name, available: v.available })) });
+    res.status(201).json({ ...product, variants: createdVariants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity })) });
   } catch {
     res.status(500).json({ error: "Error al crear producto" });
   }
@@ -134,7 +135,7 @@ router.get("/:id", async (req, res) => {
 
     const product = products[0];
     const variants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.product_id, id));
-    res.json({ ...product, variants: variants.map(v => ({ id: v.id, name: v.name, available: v.available })) });
+    res.json({ ...product, variants: variants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity })) });
   } catch {
     res.status(500).json({ error: "Error al obtener producto" });
   }
@@ -180,7 +181,8 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
         const variantsToInsert = variants.map(v => ({
           product_id: id,
           name: v.name,
-          available: v.available
+          available: v.available,
+          quantity: v.quantity ?? 0
         }));
         finalVariants = await db.insert(productVariantsTable).values(variantsToInsert).returning();
       }
@@ -188,7 +190,7 @@ router.put("/:id", requireAuth, async (req: AuthRequest, res) => {
       finalVariants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.product_id, id));
     }
 
-    res.json({ ...updatedProduct, variants: finalVariants.map(v => ({ id: v.id, name: v.name, available: v.available })) });
+    res.json({ ...updatedProduct, variants: finalVariants.map(v => ({ id: v.id, name: v.name, available: v.available, quantity: v.quantity })) });
   } catch {
     res.status(500).json({ error: "Error al actualizar producto" });
   }

@@ -197,7 +197,7 @@ function ProductFormDialog({
   const [price, setPrice] = useState("");
   const [desc, setDesc] = useState("");
   const [imgUrl, setImgUrl] = useState("");
-  const [variants, setVariants] = useState<{ id?: number, name: string, available: boolean }[]>([]);
+  const [variants, setVariants] = useState<{ id?: number, name: string, available: boolean, quantity: number }[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
 
@@ -408,7 +408,7 @@ function ProductFormDialog({
           <div className="space-y-3 pt-4 border-t border-primary/20">
             <div className="flex items-center justify-between">
                <Label className="text-xs font-orbitron text-primary/70">VARIANTES / MODELOS</Label>
-               <Button type="button" variant="outline" size="sm" onClick={() => setVariants([...variants, { name: "", available: true }])} className="text-xs h-7 px-2 border-primary/30 text-primary hover:bg-primary/10">
+               <Button type="button" variant="outline" size="sm" onClick={() => setVariants([...variants, { name: "", available: true, quantity: 0 }])} className="text-xs h-7 px-2 border-primary/30 text-primary hover:bg-primary/10">
                  <Plus className="w-3 h-3 mr-1" /> Modelo
                </Button>
             </div>
@@ -425,10 +425,19 @@ function ProductFormDialog({
                             setVariants(newV);
                          }} 
                          placeholder="Ej: Zayu" 
-                         className="bg-background border-primary/20 text-sm h-8"
+                         className="bg-background border-primary/20 text-sm h-8 flex-1"
                          required
                        />
-                       <label className="flex items-center gap-2 text-xs shrink-0 cursor-pointer font-orbitron">
+                       <div className="flex items-center gap-1 shrink-0">
+                         <button type="button" onClick={() => { const newV=[...variants]; newV[i].quantity=Math.max(0,(newV[i].quantity??0)-1); setVariants(newV); }} className="w-6 h-6 border border-border rounded flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 text-xs">
+                           −
+                         </button>
+                         <span className="w-7 text-center text-xs font-orbitron font-bold">{v.quantity ?? 0}</span>
+                         <button type="button" onClick={() => { const newV=[...variants]; newV[i].quantity=(newV[i].quantity??0)+1; setVariants(newV); }} className="w-6 h-6 border border-border rounded flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/40 text-xs">
+                           +
+                         </button>
+                       </div>
+                       <label className="flex items-center gap-1 text-xs shrink-0 cursor-pointer font-orbitron">
                          <input 
                            type="checkbox" 
                            checked={v.available} 
@@ -439,7 +448,7 @@ function ProductFormDialog({
                            }} 
                            className="accent-primary"
                          />
-                         En stock
+                         Stock
                        </label>
                        <Button type="button" variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10 shrink-0 h-8 w-8" onClick={() => {
                           setVariants(variants.filter((_, idx) => idx !== i));

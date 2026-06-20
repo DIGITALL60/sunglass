@@ -28,7 +28,8 @@ export async function initDb() {
       id SERIAL PRIMARY KEY,
       product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
       name TEXT NOT NULL,
-      available BOOLEAN DEFAULT TRUE NOT NULL
+      available BOOLEAN DEFAULT TRUE NOT NULL,
+      quantity INTEGER DEFAULT 0 NOT NULL
     );
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,

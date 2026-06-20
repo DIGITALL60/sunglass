@@ -335,7 +335,7 @@ components:
 
     ProductVariant:
       type: object
-      required: [id, name, available]
+      required: [id, name, available, quantity]
       properties:
         id:
           type: integer
@@ -343,6 +343,8 @@ components:
           type: string
         available:
           type: boolean
+        quantity:
+          type: integer
 
     ProductVariantInput:
       type: object
@@ -354,6 +356,8 @@ components:
           type: string
         available:
           type: boolean
+        quantity:
+          type: integer
 
     ProductStats:
       type: object

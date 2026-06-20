@@ -18,6 +18,7 @@ export const productVariantsTable = pgTable("product_variants", {
   product_id: integer("product_id").references(() => productsTable.id, { onDelete: "cascade" }).notNull(),
   name: text("name").notNull(),
   available: boolean("available").default(true).notNull(),
+  quantity: integer("quantity").default(0).notNull(),
 });
 
 export const productsRelations = relations(productsTable, ({ many }) => ({
