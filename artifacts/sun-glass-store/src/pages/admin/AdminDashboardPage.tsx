@@ -203,14 +203,14 @@ function ProductFormDialog({
       setNewCat("");
     } else {
       setName("");
-      setCategory(categories[0] || "");
+      setCategory("");
       setPrice("");
       setDesc("");
       setImgUrl("");
       setNewCat("");
     }
     setUploadError("");
-  }, [product, isOpen, categories]);
+  }, [product, isOpen]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -224,7 +224,8 @@ function ProductFormDialog({
       const formData = new FormData();
       formData.append("image", file);
 
-      const res = await fetch("/api/upload", {
+      const baseUrl = import.meta.env.VITE_API_URL ?? "";
+      const res = await fetch(`${baseUrl}/api/upload`, {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -294,9 +295,13 @@ function ProductFormDialog({
               <select
                 className="flex h-10 w-full rounded-md border border-primary/30 bg-background/50 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 value={category}
-                onChange={e => setCategory(e.target.value)}
+                onChange={e => {
+                  setCategory(e.target.value);
+                  if (e.target.value !== "") setNewCat("");
+                }}
                 data-testid="select-product-category"
               >
+                <option value="">-- Seleccionar --</option>
                 {categories.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
@@ -304,7 +309,10 @@ function ProductFormDialog({
               <Label className="text-xs font-orbitron text-primary/70">O NUEVA CATEGORIA</Label>
               <Input
                 value={newCat}
-                onChange={e => setNewCat(e.target.value)}
+                onChange={e => {
+                  setNewCat(e.target.value);
+                  if (e.target.value.trim() !== "") setCategory("");
+                }}
                 placeholder="Ej: Collares"
                 className="bg-background/50 border-primary/30"
                 data-testid="input-new-category"
