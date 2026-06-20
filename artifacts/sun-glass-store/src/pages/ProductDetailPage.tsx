@@ -149,8 +149,8 @@ export default function ProductDetailPage() {
                      className={cn(
                        "px-3 py-1.5 text-xs font-medium rounded-md border transition-colors",
                        !m.available && "opacity-40 cursor-not-allowed text-muted-foreground relative after:absolute after:left-0 after:top-1/2 after:w-full after:h-[1px] after:bg-current",
-                       m.available && selectedModel === m.name && "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white",
-                       m.available && selectedModel !== m.name && "bg-card text-foreground hover:border-foreground/30 border-border"
+                       m.available && selectedModel === m.name && "bg-primary text-primary-foreground border-primary shadow-[0_0_10px_rgba(255,0,153,0.3)]",
+                       m.available && selectedModel !== m.name && "bg-card text-foreground hover:border-primary/50 border-border"
                      )}
                    >
                      {m.name} {m.available ? `(${m.quantity ?? 0})` : ""}
@@ -191,7 +191,7 @@ export default function ProductDetailPage() {
 
           {/* Add to cart */}
           <Button 
-            className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none font-orbitron tracking-wider disabled:opacity-50"
+            className="h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-white w-full mb-8 rounded-md shadow-[0_0_20px_rgba(255,0,153,0.3)] hover:shadow-[0_0_30px_rgba(255,0,153,0.5)] transition-all font-orbitron tracking-wider disabled:opacity-50"
             disabled={maxStock === 0}
             onClick={() => {
                for(let i=0; i<quantity; i++) {
