@@ -10,10 +10,13 @@ import fs from "fs";
 const execAsync = promisify(exec);
 
 const UPLOADS_DIR = path.join(process.cwd(), "uploads");
-mkdirSync(UPLOADS_DIR, { recursive: true });
-
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
+  destination: (_req, _file, cb) => {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+    cb(null, UPLOADS_DIR);
+  },
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
     cb(null, `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`);

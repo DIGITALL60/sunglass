@@ -11,13 +11,13 @@ const execAsync = promisify(exec);
 // Use process.cwd() — server runs from artifacts/api-server/
 const UPLOADS_DIR = path.join(process.cwd(), "uploads");
 
-// Ensure the uploads directory exists before saving files
-if (!fs.existsSync(UPLOADS_DIR)) {
-  fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-}
-
 const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, UPLOADS_DIR),
+  destination: (_req, _file, cb) => {
+    if (!fs.existsSync(UPLOADS_DIR)) {
+      fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+    }
+    cb(null, UPLOADS_DIR);
+  },
   filename: (_req, file, cb) => {
     const ext = path.extname(file.originalname).toLowerCase() || ".jpg";
     const unique = `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
