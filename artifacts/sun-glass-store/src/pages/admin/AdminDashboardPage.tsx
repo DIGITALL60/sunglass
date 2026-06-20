@@ -238,7 +238,7 @@ function ProductFormDialog({
       for (const file of files) {
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "onarbq3w");
+        formData.append("upload_preset", "sunglass_unsigned");
 
         console.log("[Upload] Intentando subir a Cloudinary:", file.name, file.size);
 
