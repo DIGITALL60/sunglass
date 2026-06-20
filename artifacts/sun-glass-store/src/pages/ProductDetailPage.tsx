@@ -45,9 +45,12 @@ export default function ProductDetailPage() {
   
   // Set initial selected model if available
   if (!selectedModel && productVariants.length > 0) {
-    const firstAvailable = productVariants.find((v: any) => v.available);
+    const firstAvailable = productVariants.find((v: any) => v.available && v.quantity > 0);
     setSelectedModel(firstAvailable ? firstAvailable.name : productVariants[0].name);
   }
+
+  const selectedVariantObj = productVariants.find((m: any) => m.name === selectedModel);
+  const maxStock = selectedVariantObj?.quantity ?? 99;
 
   return (
     <div className="min-h-[100dvh] pt-28 pb-20 px-6 max-w-6xl mx-auto font-orbitron">
@@ -122,7 +125,10 @@ export default function ProductDetailPage() {
                    <button
                      key={m.name}
                      disabled={!m.available}
-                     onClick={() => setSelectedModel(m.name)}
+                     onClick={() => {
+                       setSelectedModel(m.name);
+                       setQuantity(1);
+                     }}
                      className={cn(
                        "px-3 py-1.5 text-xs font-medium rounded-md border transition-colors",
                        !m.available && "opacity-40 cursor-not-allowed text-muted-foreground relative after:absolute after:left-0 after:top-1/2 after:w-full after:h-[1px] after:bg-current",
@@ -130,7 +136,7 @@ export default function ProductDetailPage() {
                        m.available && selectedModel !== m.name && "bg-card text-foreground hover:border-foreground/30 border-border"
                      )}
                    >
-                     {m.name}
+                     {m.name} {m.available ? `(${m.quantity ?? 0})` : ""}
                    </button>
                 ))}
               </div>
@@ -139,18 +145,27 @@ export default function ProductDetailPage() {
 
           {/* Quantity */}
           <div className="mb-8">
-            <h3 className="font-bold mb-3 text-sm uppercase tracking-wide">Cantidad</h3>
+            <div className="flex items-center gap-3 mb-3">
+              <h3 className="font-bold text-sm uppercase tracking-wide">Cantidad</h3>
+              {selectedVariantObj && (
+                <span className="text-xs text-muted-foreground bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
+                  {selectedVariantObj.quantity} disponibles
+                </span>
+              )}
+            </div>
             <div className="flex items-center border border-border rounded-md w-fit bg-card">
               <button 
                 onClick={() => setQuantity(Math.max(1, quantity - 1))} 
                 className="p-3 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                disabled={maxStock === 0}
               >
                 <Minus className="w-4 h-4" />
               </button>
-              <span className="w-12 text-center font-medium">{quantity}</span>
+              <span className="w-12 text-center font-medium">{maxStock === 0 ? 0 : quantity}</span>
               <button 
-                onClick={() => setQuantity(quantity + 1)} 
+                onClick={() => setQuantity(Math.min(maxStock, quantity + 1))} 
                 className="p-3 hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                disabled={quantity >= maxStock || maxStock === 0}
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -159,14 +174,17 @@ export default function ProductDetailPage() {
 
           {/* Add to cart */}
           <Button 
-            className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none font-orbitron tracking-wider"
+            className="h-14 text-lg font-medium bg-[#ffb6c1] hover:bg-[#ff9eb0] text-black w-full mb-8 rounded-md shadow-none font-orbitron tracking-wider disabled:opacity-50"
+            disabled={maxStock === 0}
             onClick={() => {
+               const variant = selectedVariantObj ? { id: selectedVariantObj.id, name: selectedVariantObj.name } : undefined;
                for(let i=0; i<quantity; i++) {
-                 addToCart(product);
+                 // addToCart logic will need to handle selected variants properly if not already done.
+                 addToCart({ ...product, selectedVariant: variant });
                }
             }}
           >
-            Agregar al carrito
+            {maxStock === 0 ? "Agotado" : "Agregar al carrito"}
           </Button>
         </motion.div>
       </div>
