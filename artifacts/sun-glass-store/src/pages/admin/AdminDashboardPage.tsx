@@ -242,7 +242,7 @@ function ProductFormDialog({
 
         console.log("[Upload] Intentando subir a Cloudinary:", file.name, file.size);
 
-        const res = await fetch("https://api.cloudinary.com/v1_1/dafxkpvrz/image/upload", {
+        const res = await fetch("https://api.cloudinary.com/v1_1/dafxkpvrx/image/upload", {
           method: "POST",
           body: formData,
         });
