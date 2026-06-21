@@ -195,7 +195,7 @@ export default function ProductDetailPage() {
             disabled={maxStock === 0}
             onClick={() => {
                for(let i=0; i<quantity; i++) {
-                 addToCart(product);
+                 addToCart({ ...product, model: selectedModel || undefined });
                }
             }}
           >

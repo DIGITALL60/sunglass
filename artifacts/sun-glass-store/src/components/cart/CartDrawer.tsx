@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/button";
 
 const WHATSAPP_NUMBER = "5493534069127";
 
-function buildWhatsAppMessage(cart: { name: string; price: number; quantity: number }[], total: number): string {
-  const lines = cart.map(
-    (item) =>
-      `• ${item.name} x${item.quantity} — ${formatPrice(item.price * item.quantity)}`
-  );
+function buildWhatsAppMessage(cart: { name: string; price: number; quantity: number; model?: string }[], total: number): string {
+  const lines = cart.map((item) => {
+    const modelText = item.model ? ` (${item.model})` : "";
+    return `• ${item.name}${modelText} x${item.quantity} — ${formatPrice(item.price * item.quantity)}`;
+  });
 
   const message = [
     "¡Hola! Quiero realizar el siguiente pedido:",
@@ -78,6 +78,7 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                     </div>
                     <div className="flex-1 flex flex-col min-w-0">
                       <h3 className="font-bold text-sm line-clamp-2 mb-1">{item.name}</h3>
+                      {item.model && <p className="text-xs text-muted-foreground mb-1">Modelo: {item.model}</p>}
                       <p className="text-primary text-sm font-orbitron mb-2">{formatPrice(item.price)}</p>
                       <div className="flex items-center gap-3 mt-auto">
                         <div className="flex items-center gap-2 bg-background rounded-md px-2 py-1 border border-primary/20">

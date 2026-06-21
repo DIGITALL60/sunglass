@@ -1,20 +1,22 @@
 import { create } from "zustand";
 
 export interface CartItem {
-  id: number;
+  id: string; // product.id + (model ? "-" + model : "")
+  productId: number;
   name: string;
   price: number;
   image_url: string;
   quantity: number;
+  model?: string;
 }
 
 interface CartStore {
   cart: CartItem[];
   cartTotal: number;
   cartCount: number;
-  addToCart: (product: { id: number; name: string; price: number; image_url: string }) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addToCart: (product: { id: number; name: string; price: number; image_url: string; model?: string }) => void;
+  removeFromCart: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
 }
 
@@ -32,12 +34,21 @@ export const useCartStore = create<CartStore>((set) => ({
 
   addToCart: (product) =>
     set((state) => {
-      const existing = state.cart.find((i) => i.id === product.id);
+      const cartItemId = product.model ? `${product.id}-${product.model}` : String(product.id);
+      const existing = state.cart.find((i) => i.id === cartItemId);
       const newCart = existing
         ? state.cart.map((i) =>
-            i.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
+            i.id === cartItemId ? { ...i, quantity: i.quantity + 1 } : i
           )
-        : [...state.cart, { ...product, quantity: 1 }];
+        : [...state.cart, { 
+            id: cartItemId, 
+            productId: product.id, 
+            name: product.name, 
+            price: product.price, 
+            image_url: product.image_url, 
+            model: product.model,
+            quantity: 1 
+          }];
       return { cart: newCart, ...computeTotals(newCart) };
     }),
 
