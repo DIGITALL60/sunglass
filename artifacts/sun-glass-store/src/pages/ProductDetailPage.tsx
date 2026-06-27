@@ -133,6 +133,13 @@ export default function ProductDetailPage() {
             </span>
           </div>
 
+          {/* Description */}
+          {product.description && (
+            <div className="mb-8 text-muted-foreground leading-relaxed whitespace-pre-wrap text-sm md:text-base">
+              {product.description}
+            </div>
+          )}
+
           {/* Models */}
           {productVariants.length > 0 && (
             <div className="mb-8">
