@@ -92,7 +92,7 @@ export default function AdminDashboardPage() {
         </nav>
 
         <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10 mt-auto" onClick={handleLogout}>
-          <LogOut className="w-4 h-4 mr-2" /> Cerrar Sesión
+          <LogOut className="w-4 h-4 mr-2" /> Cerrar Sesion
         </Button>
       </aside>
 
@@ -396,7 +396,7 @@ function ProductFormDialog({
 
             <div className="h-4"></div>
             
-            <Label className="text-xs font-orbitron text-primary/70">IMÁGENES SECUNDARIAS (Opcional)</Label>
+            <Label className="text-xs font-orbitron text-primary/70">IMAGENES SECUNDARIAS (Opcional)</Label>
             
             <div
               onClick={() => extraFileInputRef.current?.click()}
@@ -404,7 +404,7 @@ function ProductFormDialog({
             >
                <>
                  <Upload className="w-6 h-6 text-primary/50" />
-                 <p className="text-xs text-primary font-orbitron">AGREGAR MÁS FOTOS</p>
+                 <p className="text-xs text-primary font-orbitron">AGREGAR MAS FOTOS</p>
                  <p className="text-[10px] text-muted-foreground">Puedes seleccionar varias</p>
                </>
             </div>
