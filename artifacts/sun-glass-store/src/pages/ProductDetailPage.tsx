@@ -145,6 +145,10 @@ export default function ProductDetailPage() {
                      onClick={() => {
                        setSelectedModel(m.name);
                        setQuantity(1);
+                       const vIndex = productVariants.findIndex((v: any) => v.name === m.name);
+                       if (vIndex !== -1 && allImages.length > vIndex + 1) {
+                         setActiveImage(vIndex + 1);
+                       }
                      }}
                      className={cn(
                        "px-3 py-1.5 text-xs font-medium rounded-md border transition-colors",
@@ -195,7 +199,7 @@ export default function ProductDetailPage() {
             disabled={maxStock === 0}
             onClick={() => {
                for(let i=0; i<quantity; i++) {
-                 addToCart({ ...product, model: selectedModel || undefined });
+                 addToCart({ ...product, image_url: currentDisplayImage, model: selectedModel || undefined });
                }
             }}
           >
