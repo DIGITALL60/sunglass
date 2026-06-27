@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useListProducts, useListCategories, ListProductsSort } from "@workspace/api-client-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, SlidersHorizontal, X, ShoppingCart } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -30,6 +30,7 @@ export default function StorePage() {
 
   const { data: categories = [] } = useListCategories();
   const addToCart = useCartStore((state) => state.addToCart);
+  const [, navigate] = useLocation();
 
   const filteredProducts = useMemo(() => {
     if (!search) return products;
@@ -245,7 +246,14 @@ export default function StorePage() {
                           ? "bg-primary text-primary-foreground border-primary"
                           : "bg-secondary border-primary/30 hover:bg-primary hover:text-primary-foreground hover:border-primary"
                       }`}
-                      onClick={() => handleAddToCart(product)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (window.innerWidth < 768) {
+                          navigate(`/producto/${product.id}`);
+                        } else {
+                          handleAddToCart(product);
+                        }
+                      }}
                       data-testid={`button-add-to-cart-${product.id}`}
                     >
                       <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
