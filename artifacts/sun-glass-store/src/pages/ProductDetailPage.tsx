@@ -58,8 +58,18 @@ export default function ProductDetailPage() {
     setSelectedModel(firstAvailable ? firstAvailable.name : productVariants[0].name);
   }
 
+  const availableVariants = productVariants.filter((v: any) => v.available && v.quantity > 0);
   const selectedVariantObj = productVariants.find((m: any) => m.name === selectedModel);
-  const maxStock = selectedVariantObj?.quantity ?? 99;
+  
+  let maxStock = 99;
+  if (selectedModel === "Todos") {
+    const availableQtys = availableVariants.map((v:any) => v.quantity);
+    maxStock = availableQtys.length > 0 ? Math.min(...availableQtys) : 0;
+  } else {
+    maxStock = selectedVariantObj?.quantity ?? 99;
+  }
+
+  const displayPrice = selectedModel === "Todos" ? product.price * availableVariants.length : product.price;
 
   return (
     <>
@@ -123,10 +133,10 @@ export default function ProductDetailPage() {
           {/* Price section */}
           <div className="flex flex-wrap items-center gap-3 mb-8">
             <span className="text-3xl font-bold text-foreground">
-              {formatPrice(product.price)}
+              {formatPrice(displayPrice)}
             </span>
             <span className="text-xl text-muted-foreground line-through font-medium">
-              {formatPrice(product.price * 1.15)}
+              {formatPrice(displayPrice * 1.15)}
             </span>
             <span className="text-xs font-bold bg-white text-black px-2 py-0.5 rounded border border-gray-300 tracking-wider">
               15% OFF
@@ -145,6 +155,21 @@ export default function ProductDetailPage() {
             <div className="mb-8">
               <h3 className="font-bold mb-3 text-sm uppercase tracking-wide">Modelo</h3>
               <div className="flex flex-wrap gap-2">
+                {productVariants.length > 1 && (
+                  <button
+                    onClick={() => {
+                      setSelectedModel("Todos");
+                      setQuantity(1);
+                      setActiveImage(0);
+                    }}
+                    className={cn(
+                      "px-3 py-1.5 text-xs font-medium rounded-md border transition-colors",
+                      selectedModel === "Todos" ? "bg-primary text-primary-foreground border-primary shadow-[0_0_10px_rgba(255,0,153,0.3)]" : "bg-card text-foreground hover:border-primary/50 border-border"
+                    )}
+                  >
+                    Todos los modelos ({availableVariants.length})
+                  </button>
+                )}
                 {productVariants.map((m: any) => (
                    <button
                      key={m.name}
@@ -175,9 +200,9 @@ export default function ProductDetailPage() {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-3">
               <h3 className="font-bold text-sm uppercase tracking-wide">Cantidad</h3>
-              {selectedVariantObj && (
+              {(selectedVariantObj || selectedModel === "Todos") && (
                 <span className="text-xs text-muted-foreground bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
-                  {selectedVariantObj.quantity} disponibles
+                  {maxStock} disponibles
                 </span>
               )}
             </div>
@@ -205,8 +230,18 @@ export default function ProductDetailPage() {
             className="h-14 text-lg font-bold bg-primary hover:bg-primary/90 text-white w-full mb-8 rounded-md shadow-[0_0_20px_rgba(255,0,153,0.3)] hover:shadow-[0_0_30px_rgba(255,0,153,0.5)] transition-all font-orbitron tracking-wider disabled:opacity-50"
             disabled={maxStock === 0}
             onClick={() => {
-               for(let i=0; i<quantity; i++) {
-                 addToCart({ ...product, image_url: currentDisplayImage, model: selectedModel || undefined });
+               if (selectedModel === "Todos") {
+                 for (const m of availableVariants) {
+                   const vIndex = productVariants.findIndex((v: any) => v.name === m.name);
+                   const img = (vIndex !== -1 && allImages.length > vIndex + 1) ? allImages[vIndex + 1] : product.image_url;
+                   for(let i=0; i<quantity; i++) {
+                     addToCart({ ...product, image_url: img, model: m.name });
+                   }
+                 }
+               } else {
+                 for(let i=0; i<quantity; i++) {
+                   addToCart({ ...product, image_url: currentDisplayImage, model: selectedModel || undefined });
+                 }
                }
             }}
           >
