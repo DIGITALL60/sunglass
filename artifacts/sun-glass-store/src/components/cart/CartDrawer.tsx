@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/useCartStore";
 import { formatPrice } from "@/lib/format";
@@ -7,7 +8,11 @@ import { Button } from "@/components/ui/button";
 
 const WHATSAPP_NUMBER = "5493534069127";
 
-function buildWhatsAppMessage(cart: { name: string; price: number; quantity: number; model?: string }[], total: number): string {
+function buildWhatsAppMessage(
+  cart: { name: string; price: number; quantity: number; model?: string }[], 
+  total: number,
+  shipping: { requires: boolean; address: string }
+): string {
   const lines = cart.map((item) => {
     const modelText = item.model ? ` (${item.model})` : "";
     return `• ${item.name}${modelText} x${item.quantity} — ${formatPrice(item.price * item.quantity)}`;
@@ -21,18 +26,24 @@ function buildWhatsAppMessage(cart: { name: string; price: number; quantity: num
     ...lines,
     "",
     `*TOTAL: ${formatPrice(total)}*`,
-    "",
-    "¡Gracias!",
-  ].join("\n");
+  ];
 
-  return message;
+  if (shipping.requires) {
+    message.push("", "🚚 *DATOS DE ENVÍO*", `Dirección: ${shipping.address || 'A convenir'}`);
+  }
+
+  message.push("", "¡Gracias!");
+
+  return message.join("\n");
 }
 
 export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCartStore();
+  const [requiresShipping, setRequiresShipping] = useState(false);
+  const [shippingAddress, setShippingAddress] = useState("");
 
   const handleCheckout = () => {
-    const message = buildWhatsAppMessage(cart, cartTotal);
+    const message = buildWhatsAppMessage(cart, cartTotal, { requires: requiresShipping, address: shippingAddress });
     const encoded = encodeURIComponent(message);
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
     clearCart();
@@ -114,6 +125,26 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
 
             {cart.length > 0 && (
               <div className="p-4 border-t border-primary/20 bg-secondary/30 space-y-3">
+                <div className="space-y-2 pb-3 border-b border-primary/10">
+                  <label className="flex items-center gap-2 text-sm font-orbitron cursor-pointer">
+                    <input 
+                      type="checkbox" 
+                      checked={requiresShipping} 
+                      onChange={(e) => setRequiresShipping(e.target.checked)}
+                      className="accent-primary w-4 h-4 rounded-sm border-primary/40"
+                    />
+                    Quiero envío a domicilio
+                  </label>
+                  {requiresShipping && (
+                    <input
+                      type="text"
+                      placeholder="Dirección, Ciudad, Provincia, CP"
+                      value={shippingAddress}
+                      onChange={(e) => setShippingAddress(e.target.value)}
+                      className="w-full text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                    />
+                  )}
+                </div>
                 <div className="flex justify-between items-center">
                   <span className="font-orbitron text-sm text-muted-foreground">TOTAL</span>
                   <span className="font-orbitron font-bold text-xl text-primary">{formatPrice(cartTotal)}</span>
