@@ -11,7 +11,7 @@ const WHATSAPP_NUMBER = "5493534069127";
 function buildWhatsAppMessage(
   cart: { name: string; price: number; quantity: number; model?: string }[], 
   total: number,
-  shipping: { requires: boolean; address: string }
+  shipping: { requires: boolean; address: { province: string, city: string, street: string, number: string, cp: string, apt: string } }
 ): string {
   const lines = cart.map((item) => {
     const modelText = item.model ? ` (${item.model})` : "";
@@ -29,18 +29,31 @@ function buildWhatsAppMessage(
   ];
 
   if (shipping.requires) {
-    message.push("", "🚚 *DATOS DE ENVÍO*", `Dirección: ${shipping.address || 'A convenir'}`);
+    const { street, number, apt, city, province, cp } = shipping.address;
+    message.push(
+      "", 
+      "🚚 *DATOS DE ENVÍO*", 
+      `Calle: ${street || '-'} ${number || '-'}`,
+      apt ? `Piso/Depto: ${apt}` : null,
+      `Localidad: ${city || '-'}`,
+      `Provincia: ${province || '-'}`,
+      `Código Postal: ${cp || '-'}`
+    );
   }
 
-  message.push("", "¡Gracias!");
+  // Filter out nulls from message array
+  const finalMessage = message.filter(line => line !== null);
+  finalMessage.push("", "¡Gracias!");
 
-  return message.join("\n");
+  return finalMessage.join("\n");
 }
 
 export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { cart, removeFromCart, updateQuantity, cartTotal, clearCart } = useCartStore();
   const [requiresShipping, setRequiresShipping] = useState(false);
-  const [shippingAddress, setShippingAddress] = useState("");
+  const [shippingAddress, setShippingAddress] = useState({
+    province: "", city: "", street: "", number: "", cp: "", apt: ""
+  });
 
   const handleCheckout = () => {
     const message = buildWhatsAppMessage(cart, cartTotal, { requires: requiresShipping, address: shippingAddress });
@@ -136,13 +149,50 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                     Quiero envío a domicilio
                   </label>
                   {requiresShipping && (
-                    <input
-                      type="text"
-                      placeholder="Dirección, Ciudad, Provincia, CP"
-                      value={shippingAddress}
-                      onChange={(e) => setShippingAddress(e.target.value)}
-                      className="w-full text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
-                    />
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <input
+                        type="text"
+                        placeholder="Provincia"
+                        value={shippingAddress.province}
+                        onChange={(e) => setShippingAddress({...shippingAddress, province: e.target.value})}
+                        className="col-span-2 text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Localidad/Ciudad"
+                        value={shippingAddress.city}
+                        onChange={(e) => setShippingAddress({...shippingAddress, city: e.target.value})}
+                        className="col-span-2 text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Calle"
+                        value={shippingAddress.street}
+                        onChange={(e) => setShippingAddress({...shippingAddress, street: e.target.value})}
+                        className="col-span-1 text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Altura"
+                        value={shippingAddress.number}
+                        onChange={(e) => setShippingAddress({...shippingAddress, number: e.target.value})}
+                        className="col-span-1 text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Piso/Depto (Opc)"
+                        value={shippingAddress.apt}
+                        onChange={(e) => setShippingAddress({...shippingAddress, apt: e.target.value})}
+                        className="col-span-1 text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Código Postal"
+                        value={shippingAddress.cp}
+                        onChange={(e) => setShippingAddress({...shippingAddress, cp: e.target.value})}
+                        className="col-span-1 text-sm p-2 rounded-md border border-primary/20 bg-background/50 focus:outline-none focus:border-primary"
+                      />
+                    </div>
                   )}
                 </div>
                 <div className="flex justify-between items-center">
