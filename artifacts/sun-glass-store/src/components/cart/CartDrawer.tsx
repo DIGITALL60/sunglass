@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCartStore } from "@/store/useCartStore";
+import { PaymentModal } from "./PaymentModal";
 import { formatPrice } from "@/lib/format";
 import { getFullImgUrl } from "@/lib/utils";
 import { X, Minus, Plus, Trash2, MessageCircle, Truck, CreditCard } from "lucide-react";
@@ -11,7 +12,8 @@ const WHATSAPP_NUMBER = "5493534069127";
 function buildWhatsAppMessage(
   cart: { name: string; price: number; quantity: number; model?: string }[], 
   total: number,
-  shipping: { requires: boolean; address: { province: string, city: string, street: string, number: string, cp: string, apt: string } }
+  shipping: { requires: boolean; address: { province: string, city: string, street: string, number: string, cp: string, apt: string } },
+  receiptUrl: string
 ): string {
   const lines = cart.map((item) => {
     const modelText = item.model ? ` (${item.model})` : "";
@@ -34,7 +36,7 @@ function buildWhatsAppMessage(
       "", 
       "🚚 *DATOS DE ENVÍO*", 
       `Calle: ${street || '-'} ${number || '-'}`,
-      apt ? `Piso/Depto: ${apt}` : null,
+      ...(apt ? [`Piso/Depto: ${apt}`] : []),
       `Localidad: ${city || '-'}`,
       `Provincia: ${province || '-'}`,
       `Código Postal: ${cp || '-'}`
@@ -43,7 +45,14 @@ function buildWhatsAppMessage(
 
   // Filter out nulls from message array
   const finalMessage = message.filter(line => line !== null);
-  finalMessage.push("", "¡Gracias!");
+  
+  finalMessage.push(
+    "", 
+    "🧾 *COMPROBANTE DE PAGO:*", 
+    receiptUrl,
+    "", 
+    "¡Gracias!"
+  );
 
   return finalMessage.join("\n");
 }
@@ -54,17 +63,24 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
   const [shippingAddress, setShippingAddress] = useState({
     province: "", city: "", street: "", number: "", cp: "", apt: ""
   });
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
-  const handleCheckout = () => {
-    const message = buildWhatsAppMessage(cart, cartTotal, { requires: requiresShipping, address: shippingAddress });
+  const handleOpenPayment = () => {
+    setIsPaymentOpen(true);
+  };
+
+  const handleConfirmOrder = (receiptUrl: string) => {
+    const message = buildWhatsAppMessage(cart, cartTotal, { requires: requiresShipping, address: shippingAddress }, receiptUrl);
     const encoded = encodeURIComponent(message);
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`;
     clearCart();
+    setIsPaymentOpen(false);
     onClose();
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
+    <>
     <AnimatePresence>
       {isOpen && (
         <>
@@ -200,12 +216,12 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
                   <span className="font-orbitron font-bold text-xl text-primary">{formatPrice(cartTotal)}</span>
                 </div>
                 <Button
-                  onClick={handleCheckout}
+                  onClick={handleOpenPayment}
                   className="w-full font-orbitron tracking-widest bg-[#25D366] hover:bg-[#20ba59] text-white gap-2 text-sm"
                   data-testid="button-checkout-whatsapp"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  PEDIR POR WHATSAPP
+                  CONFIRMAR Y PAGAR
                 </Button>
                 <p className="text-xs text-muted-foreground text-center">
                   Te redirigimos a WhatsApp con tu pedido listo
@@ -224,5 +240,12 @@ export function CartDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () =
         </>
       )}
     </AnimatePresence>
+    <PaymentModal
+      isOpen={isPaymentOpen}
+      onClose={() => setIsPaymentOpen(false)}
+      total={cartTotal}
+      onConfirm={handleConfirmOrder}
+    />
+    </>
   );
 }
